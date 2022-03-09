@@ -1,487 +1,285 @@
-import gsap from "gsap";
-import { round } from "mathjs";
 import * as React from "react";
-import { CIRCUMFEREMCE, RADUIS, RESOURCE_DECIMAL, USDC_DECIMAL } from "../constants";
+import styled from "styled-components";
+import { Tooltip } from 'react-tippy';
+import { PALLETE } from "../constants";
 import { IResourceData, TOKENS } from "../data/types";
-import {
-  MarketService
-} from "../services/marketService";
-import { thousandsFormatter } from "../utils";
-import Spinner from "./Spinner";
+import { d3Format } from '../utils';
+import { ResourceIcon } from './Icons';
+import { Clock } from "./Clock";
 
-const CIRCLES_TYPES = {
-  progress1: "progress1",
-  progress2: "progress2",
-};
-
-let tooltipIsHovering = {
-  [TOKENS.ammo]: false,
-  [TOKENS.food]: false,
-  [TOKENS.fuel]: false,
-  [TOKENS.tools]: false,
-};
-
-export interface ResourceProps {
-  imgSrc: string;
-  id: string;
-  pct1Color: string;
-  pct1?: number;
-  pct2?: number;
-  isBlinking?: boolean;
-  isLoading?: boolean;
-  resourceData: IResourceData;
-}
-const Resource: React.FC<ResourceProps> = ({
-  imgSrc,
+const Resource: React.FC<IResourceData> = ({
+  basic,
   id,
+  maxSeconds,
+  maxUnits,
   pct1 = 0,
   pct2 = 0,
   pct1Color,
-  isBlinking = false,
-  isLoading = false,
-  resourceData,
+  secondsLeft,   
+  unitsLeft, 
+  unitsNeedToMax
 }) => {
-  const [tl, _] = React.useState(() => gsap.timeline({ repeat: -1 }));
 
-  const progress1Ref = React.useRef<SVGCircleElement | null>(null);
-  const progress2Ref = React.useRef<SVGCircleElement | null>(null);
-  const blinkRef = React.useRef<SVGCircleElement | null>(null);
-  const trackRef = React.useRef<SVGCircleElement | null>(null);
-  const loadingBgRef = React.useRef<SVGCircleElement | null>(null);
-  const loadingSpinnerRef = React.useRef<SVGSVGElement | null>(null);
-  const menu = React.useRef<HTMLDivElement | null>(null);
-  const [tooltipData, setTooltipData] = React.useState<
-    | {
-        circle?: string;
-        resourcePrice?: number;
-        loading?: boolean;
-        out?: boolean;
-      }
-    | undefined
-  >({ loading: false });
-  const [_render, _rerender] = React.useState(false);
-
-  let tooltipContent = <></>;
-
-  const getTooltipTitleProgress1 = (id: string) => {
-    switch (id) {
-      case TOKENS.ammo:
-        return "Remaining Supply";
-
-      case TOKENS.tools:
-        return "Remaining Health";
-
-      case TOKENS.fuel:
-        return "Remaining Fuel";
-
-      case TOKENS.food:
-        return "Remaining Food";
-
-      default:
-        return "";
-    }
-  };
-
-  const getTooltipTitleProgress2 = (id: string) => {
-    switch (id) {
-      case TOKENS.ammo:
-        return "Resupply Capacity";
-
-      case TOKENS.tools:
-        return "Resupply Capacity";
-
-      case TOKENS.fuel:
-        return "Resupply Capacity";
-
-      case TOKENS.food:
-        return "Resupply Capacity";
-
-      default:
-        return "";
-    }
-  };
-
-  switch (tooltipData?.circle) {
-    case CIRCLES_TYPES.progress1:
-      tooltipContent = (
-        <div className="stat">
-          <div className="title">{getTooltipTitleProgress1(id)}</div>
-          <div className="stat-item">
-            <span className="sign" style={{ marginRight: 4 }}>
-              %
-            </span>
-            <span className="value">{round(resourceData.pct1 * 100, 2)}</span>
-          </div>
-          <div className="stat-item">
-            <span className="sign">{id}</span>
-            <span className="value">{thousandsFormatter(resourceData.unitsLeft, RESOURCE_DECIMAL)}</span>
-          </div>
-          {tooltipData.resourcePrice && tooltipData.resourcePrice > 0 ? (
-            <div className="stat-item-icon">
-              <span className="sign">USDC</span>
-              <span>
-                {thousandsFormatter(resourceData.unitsLeft * tooltipData.resourcePrice, USDC_DECIMAL)}
-              </span>
-              <div className="coin">
-                <img src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png" />
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-      );
-      break;
-
-    case CIRCLES_TYPES.progress2:
-      tooltipContent = (
-        <div className="stat">
-          <div className="title">{getTooltipTitleProgress2(id)}</div>
-          <div className="stat-item">
-            <span className="sign" style={{ marginRight: 4 }}>
-              %
-            </span>
-            <span className="value">{round((resourceData.supply / resourceData.maxUnits) * 100)}</span>
-          </div>
-          <div className="stat-item">
-            <span className="sign">{id}</span>
-            <span className="value">{thousandsFormatter(resourceData.supply, RESOURCE_DECIMAL)}</span>
-          </div>
-          <div className="stat-item-icon">
-            <span className="sign">USDC</span>
-            <span>
-              {thousandsFormatter(
-                resourceData.supply * (tooltipData.resourcePrice as number),
-                USDC_DECIMAL
-              )}
-            </span>
-            <div className="coin">
-              <img src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png" />
-            </div>
-          </div>
-
-          <div className="title-balance">
-            <div className="red-bar"></div>Balance deficit
-          </div>
-          <div className="stat-item">
-            <span className="sign" style={{ marginRight: 4 }}>
-              %
-            </span>
-            <span className="value">{round(resourceData.pct2 * 100)}</span>
-          </div>
-          <div className="stat-item">
-            <span className="sign">{id}</span>
-            <span className="value">
-              {thousandsFormatter(resourceData.untisNeedToBuy, RESOURCE_DECIMAL)}
-            </span>
-          </div>
-          <div className="stat-item-icon">
-            <span className="sign">USDC</span>
-            <span>
-              {thousandsFormatter(
-                resourceData.untisNeedToBuy *
-                  (tooltipData.resourcePrice as number),
-                USDC_DECIMAL
-              )}
-            </span>
-            <div className="coin">
-              <img src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png" />
-            </div>
-          </div>
-        </div>
-      );
-      break;
-
-    default:
-      break;
-  }
-
-  const getResourceMarketPrice = (): Promise<number> => {
-    switch (id) {
-      case TOKENS.ammo:
-        return MarketService.getAmmoMarketPrice();
-
-      case TOKENS.fuel:
-        return MarketService.getFuelMarketPrice();
-
-      case TOKENS.food:
-        return MarketService.getFoodMarketPrice();
-
-      case TOKENS.tools:
-        return MarketService.getToolMarketPrice();
-    }
-    return Promise.resolve(-1);
-  };
-
-  const setProgress1 = (pct: number) => {
-    gsap.to(progress1Ref.current, {
-      strokeDashoffset: CIRCUMFEREMCE * (1 - pct),
-      ease: "elasitc",
-      duration: 1.5,
-    });
-  };
-
-  const setProgress2 = (pct: number) => {
-    gsap.to(progress2Ref.current, {
-      strokeDashoffset: CIRCUMFEREMCE + CIRCUMFEREMCE * pct,
-      ease: "elasitc",
-      duration: 1.5,
-    });
-  };
-
-  const calculateRotation = (arcPct: number) => {
-    let degree = arcPct * 360;
-    return degree;
-  };
-
-  const blink = (show: boolean) => {
-    if (show) {
-      tl.to(blinkRef.current, {
-        fill: "#ff000040",
-        ease: "elasitc",
-        duration: 1,
-      })
-        .to(blinkRef.current, {
-          fill: "#ff000000",
-          ease: "elasitc",
-          duration: 1,
-        })
-        .play();
-    } else {
-      tl.progress(0).pause();
-    }
-  };
-
-  const loading = (show: boolean) => {
-    if (show) {
-      if (loadingBgRef.current && loadingSpinnerRef.current) {
-        loadingBgRef.current.style.fill = "#1c1c1cd1";
-        loadingSpinnerRef.current.style.display = "block";
-      }
-    } else {
-      if (loadingBgRef.current && loadingSpinnerRef.current) {
-        loadingBgRef.current.style.fill = "transparent";
-        loadingSpinnerRef.current.style.display = "none";
-      }
-    }
-  };
-
-  const progress1MouseEnter: React.MouseEventHandler<SVGCircleElement> = async (
-    e
-  ) => {
-    
-    
-    // ! No resource selected
-    if (resourceData.pct1 == 0 && resourceData.pct2 == 0) {
-      return
-    }
-
-    const { clientX, clientY } = e;
-    if (menu.current) {
-      menu.current.style.top = clientY + 20 + "px";
-      menu.current.style.left = clientX + 20 + "px";
-
-      tooltipIsHovering[id] = true;
-      _rerender(!_render);
-      const resourcePrice = await getResourceMarketPrice();
-
-      if (tooltipIsHovering[id]) {
-        tooltipIsHovering[id] = false;
-        setTooltipData({
-          circle: CIRCLES_TYPES.progress1,
-          resourcePrice,
-          loading: false,
-        });
-      }
-    }
-  };
-
-  const progress2MouseEnter: React.MouseEventHandler<SVGCircleElement> = async (
-    e
-  ) => {
-
-
-
-    // ! No resource selected
-    if (resourceData.pct1 == 0 && resourceData.pct2 == 0 && resourceData.supply == 0) {
-      return
-    }
-
-    const { clientX, clientY } = e;
-    if (menu.current) {
-      menu.current.style.top = clientY + 20 + "px";
-      menu.current.style.left = clientX + 20 + "px";
-
-      tooltipIsHovering[id] = true;
-      _rerender(!_render);
-      const resourcePrice = await getResourceMarketPrice();
-
-      if (tooltipIsHovering[id]) {
-        tooltipIsHovering[id] = false;
-        setTooltipData({
-          circle: CIRCLES_TYPES.progress2,
-          resourcePrice,
-          loading: false,
-        });
-      }
-    }
-  };
-
-  const progressMouseLeave: React.MouseEventHandler<SVGCircleElement> = (e) => {
-
-    // ! No resource selected
-    if (resourceData.pct1 == 0 && resourceData.pct2 == 0 && resourceData.supply == 0) {
-      return
-    }
-
-    const { clientX, clientY } = e;
-    if (menu.current) {
-      menu.current.style.top = clientY + 25 + "px";
-      menu.current.style.left = clientX + 25 + "px";
-      tooltipIsHovering[id] = false;
-      setTooltipData({ out: !!!tooltipData?.out });
-    }
-  };
-
-  React.useEffect(() => {
-    if (trackRef.current) {
-        trackRef.current.style.transform = `rotate(${-90 + (calculateRotation(pct1))}deg)`;
-    }
-    gsap.to(trackRef.current, {
-      strokeDashoffset: CIRCUMFEREMCE * (1 - (1 - pct2 - pct1)),
-      ease: "elasitc",
-      duration: 1.5,
-      delay: 0.5,
-    });
-  }, [pct1, pct2]);
-
-  React.useEffect(() => {
-    setProgress1(pct1);
-  }, [pct1]);
-
-  React.useEffect(() => {
-    setProgress2(pct2);
-  }, [pct2]);
-
-  React.useEffect(() => {
-    blink(isBlinking);
-  }, [isBlinking]);
-
-  React.useEffect(() => {
-    loading(isLoading);
-  }, [isLoading]);
-
-  React.useEffect(() => {}, []);
+  const tooltipHTML = (
+    <div>
+      <div className="resource-row">
+        <div className="resource-name">{id}</div>
+        <div className="resource-percent">{(pct1 * 100).toFixed(1) + ' %'}</div>
+      </div>
+      <div className="resource-units">{d3Format(unitsLeft) + ' / ' + d3Format(maxUnits)}</div>
+      
+    </div>
+  );
 
   return (
-    <>
-      <svg viewBox="0 0 100 100" width="150" height="150" id={id}>
-        <defs>
-          <clipPath id="myimage">
-            <circle cx="50" cy="50" r="50" vectorEffect="non-scaling-stroke" />
-          </clipPath>
-        </defs>
+    <ResourceWrap>
 
-        <image
-          xlinkHref={imgSrc}
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid meet"
-          clipPath="url(#myimage)"
-          style={{
-            transformOrigin: "center",
-            transform: "scale(0.6)",
-          }}
-        ></image>
+      {ResourceIconType(id, basic)}
 
-        <circle
-          r={RADUIS}
-          cx="50"
-          cy="50"
-          className="track"
-          strokeDasharray={CIRCUMFEREMCE}
-          strokeDashoffset={0}
-          ref={trackRef}
-          onMouseEnter={progress2MouseEnter}
-          onMouseLeave={progressMouseLeave}
-        />
-        <circle
-          r={RADUIS}
-          cx="50"
-          cy="50"
-          className="progress2"
-          strokeDasharray={CIRCUMFEREMCE}
-          strokeDashoffset={CIRCUMFEREMCE}
-          ref={progress2Ref}
-          onMouseEnter={progress2MouseEnter}
-          onMouseLeave={progressMouseLeave}
-        />
-        <circle
-          r={RADUIS}
-          cx="50"
-          cy="50"
-          className="progress1"
-          strokeDasharray={CIRCUMFEREMCE}
-          strokeDashoffset={CIRCUMFEREMCE}
-          ref={progress1Ref}
-          stroke={pct1Color}
-          onMouseEnter={progress1MouseEnter}
-          onMouseLeave={progressMouseLeave}
-        />
-        <circle r={RADUIS} cx="50" cy="50" className="blink" ref={blinkRef} />
-        <circle
-          r={RADUIS}
-          cx="50"
-          cy="50"
-          className="loading-bg"
-          ref={loadingBgRef}
-        />
-        <svg
-          className="loading-spinner"
-          style={{
-            background: "rgb(241, 242, 243)",
-            display: "none",
-            shapeRendering: "auto",
-          }}
-          width="100%"
-          height="100%"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid"
-          ref={loadingSpinnerRef}
-        >
-          <path
-            fill="none"
-            stroke="#b1b1b1"
-            strokeWidth="8"
-            strokeDasharray="205.271142578125 51.317785644531256"
-            d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z"
-            strokeLinecap="round"
-            style={{
-              transform: "scale(0.3)",
-              transformOrigin: "center",
-            }}
-          >
-            <animate
-              attributeName="stroke-dashoffset"
-              repeatCount="indefinite"
-              dur="3.125s"
-              keyTimes="0;1"
-              values="0;256.58892822265625"
-            ></animate>
-          </path>
-        </svg>
-      </svg>
-      <div
-        className={`hover-menu ${
-          tooltipIsHovering[id] || tooltipData?.circle ? "active" : ""
-        }`}
-        ref={menu}
-      >
-        <Spinner isLoading={tooltipIsHovering[id]} fixed={false} />
-        {tooltipContent}
-      </div>
-    </>
+      <PercentStripe>
+        <Tooltip title={id} html={tooltipHTML} delay={700} arrow>
+          <Kontent>
+            <Qty style={getQtyPosition(pct1 || 0)}>{d3Format(unitsLeft)}</Qty>
+          </Kontent>
+        </Tooltip>
+        {PercentBar(id, pct1, basic)}
+        {basic ? null : <IdTitle>{id}</IdTitle>}
+        <Notches basic={basic} />
+      </PercentStripe>
+
+      <ClockWrap>
+        <Clock  seconds={secondsLeft || 0} color={pct1Color} />
+      </ClockWrap>
+
+    </ResourceWrap>
   );
+
+
 };
 
+
 export default React.memo(Resource);
+
+const ResourceIconType = (id: string, basic: boolean | undefined) => {
+  switch (id) {
+    case TOKENS.ammo:
+      return <ResourceIcon arms className={basic ? 'fleet-basic' : 'fleet-total'} />;
+
+    case TOKENS.food:
+      return <ResourceIcon food className={basic ? 'fleet-basic' : 'fleet-total'} />;
+
+    case TOKENS.fuel:
+      return <ResourceIcon fuel className={basic ? 'fleet-basic' : 'fleet-total'} />;
+
+    case TOKENS.tools:
+      return <ResourceIcon tool className={basic ? 'fleet-basic' : 'fleet-total'} />;
+
+    default:
+      return null;
+  }
+};
+
+const PercentBar = (id: string, pct1: number, basic: boolean | undefined) => {
+
+  switch (id) {
+    case TOKENS.ammo:
+      return <Bar arms basic={basic} style={getBarWidth(pct1 || 0)}>
+        {basic ? null : <IdTitle internal>{id}</IdTitle>}
+      </Bar>;
+
+    case TOKENS.food:
+      return <Bar food basic={basic} style={getBarWidth(pct1 || 0)}>
+        {basic ? null : <IdTitle internal>{id}</IdTitle>}
+      </Bar>;
+
+    case TOKENS.fuel:
+      return <Bar fuel basic={basic} style={getBarWidth(pct1 || 0)}>
+        {basic ? null : <IdTitle internal>{id}</IdTitle>}
+      </Bar>;
+
+    case TOKENS.tools:
+      return <Bar tool basic={basic} style={getBarWidth(pct1 || 0)}>
+        {basic ? null : <IdTitle internal>{id}</IdTitle>}
+      </Bar>;
+
+    default:
+      return null;
+  }
+
+}
+
+
+
+const getBarWidth = (pct: number) => {
+  return {
+    width: (pct * 100).toFixed(1) + '%'
+  };
+};
+
+const getQtyPosition = (pct: number) => {
+  return pct > 0.5 
+    ? { right: ((1 - pct) * 100).toFixed(1) + '%' }
+    : { left: (pct * 100).toFixed(1) + '%' };
+};
+
+interface IconProps {
+  arms?: boolean;
+  food?: boolean;
+  fuel?: boolean;
+  tool?: boolean;
+  className?: string;
+  basic?: boolean;
+}
+
+const ResourceWrap = styled.div`
+  display: flex; 
+  width: 100%;
+  height: 30px;
+  padding: 6px 0 0 6px;
+`;
+
+const PercentStripe = styled.div`
+  position: relative;
+  width: calc(100% - 130px);
+  height: 20px;
+  margin: 0px 0 4px 0;
+`;
+
+const ClockWrap = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 108px;
+  padding: 4px 6px 0 0;
+`;
+
+const Kontent = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 20px;
+  align-items: center;
+  z-index: 20;
+  overflow: hidden;
+`;
+
+const Qty = styled.div`
+  position: absolute;
+  z-index: 20;
+  padding: 0 8px;
+  text-shadow: 1px 1px 4px black, -1px -1px 4px black;
+`;
+
+const Bar = styled.div<IconProps>`
+  position: absolute;
+  top: 8px;
+  bottom: 6px;
+  left: 0;
+  z-index: 2;
+  border-radius: 0 1px 1px 0;
+  overflow: hidden;
+  background: linear-gradient(0deg, 
+    rgb(52,56,56) 0%,
+    rgb(62,66,66) 30%, 
+    rgb(62,56,66) 70%, 
+    rgb(52,56,56) 100%
+  );
+  ${props => props.arms && `background: linear-gradient(0deg, 
+    rgb(40,0,0) 0%,
+    rgb(70,20,0) 30%, 
+    rgb(70,20,0) 70%, 
+    rgb(70,30,10) 100%
+  );`}
+  ${props => props.tool && `background: linear-gradient(0deg, 
+    rgb(0,0,46) 0%,
+    rgb(20,30,76) 30%, 
+    rgb(30,30,76) 70%, 
+    rgb(30,40,66) 100%
+  );`}
+  ${props => props.fuel && `background: linear-gradient(0deg, 
+    rgb(30,0,34) 0%,
+    rgb(50,20,64) 30%, 
+    rgb(60,30,64) 70%, 
+    rgb(50,40,54) 100%
+  );`}
+  ${props => props.food && `background: linear-gradient(0deg, 
+    rgb(0,20,16) 0%,
+    rgb(20,50,36) 30%, 
+    rgb(20,50,36) 70%, 
+    rgb(10,40,26) 100%
+  );`}
+  ${props => props.basic && `
+    opacity: 0.8;
+    top: 11px;
+  `}
+  @media ${PALLETE.DEVICE.mobileL} {
+    opacity: 0.8;
+  }
+`;
+
+const NotchWrap = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  z-index: 10;
+  overflow: hidden;
+`;
+
+interface IDTitle {
+  internal?: boolean;
+}
+const IdTitle = styled.div<IDTitle>`
+  position: absolute;
+  top: -3px;
+  left: 16px;
+  opacity: 0.3;
+  color: rgb(100,100,100);
+  z-index: 1;
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  ${props => props.internal && `color: rgb(200,200,200); top: -10px;`}
+  @media ${PALLETE.DEVICE.mobileL} {
+    display: none;
+  }
+`
+interface NotchProps {
+  basic?: boolean;
+}
+
+const Notches: React.FC<NotchProps> = ({basic}) => (
+  <NotchWrap>
+    <Notch basic={basic}/>
+      <N basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/>
+    <Notch basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/>
+    <Notch basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/>
+    <Notch basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/><N basic={basic}/>
+  </NotchWrap>
+);
+const Notch = styled.div<NotchProps>`
+  margin-right: calc(5% - 1px);
+  height: 100%;
+  width: 1px;
+  background: rgb(80 220 240 / 30%);
+  ${props => props.basic && `opacity: 0.5;`}
+  @media ${PALLETE.DEVICE.mobileL} {
+    opacity: 0.5;
+  }
+`;
+
+const N = styled.div<NotchProps>`
+  margin-right: calc(5% - 1px);
+  height: 8px;
+  margin-top: 6px;
+  width: 1px;
+  background: rgb(80 220 240 / 18%);
+  ${props => props.basic && `opacity: 0;`}
+  @media ${PALLETE.DEVICE.mobileL} {
+    opacity: 0;
+  }
+
+`;

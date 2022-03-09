@@ -1,9 +1,6 @@
 import create, { State } from "zustand";
+import BN from "bn.js";
 import { devtools } from "zustand/middleware";
-import ammoImg from "../assets/images/ammo.png";
-import foodImg from "../assets/images/food.png";
-import fuelImg from "../assets/images/fuel.png";
-import toolImg from "../assets/images/tool.png";
 import { COLORS } from "../constants";
 import { FleetService } from "../services/fleetService";
 import {
@@ -34,9 +31,11 @@ interface FleetState extends State {
 interface ResourceState extends State {
   resourcesData: { [key: string]: IResourceData };
   atlasBalance: number;
+  polisBalance: number;
 
   setResourcesData: (resourcesData: {[key: string]: IResourceData;}) => void;
   setAtlasBalance: (balance: number) => void;
+  setPolisBalance: (balance: number) => void;
   reset: () => void;
 }
 
@@ -96,16 +95,27 @@ export const useFleetStore = create<FleetState>(devtools((set: SetType<FleetStat
 
       return ({ fleets: newState, selectedFleets: newSelectedState });
     }, false, "SetFleets"),
-    setInventory: (inventory: IInventory | undefined) => set((state) => ({ inventory: inventory }), false, "SetInventory"),
+    setInventory: (inventory: IInventory | undefined) => set((state) => 
+      ({ inventory: inventory }), false, "SetInventory"),
     delFleets: () => set((state) => ({ fleets: [] })),
-    selectFleet: (fleet: IFleet | undefined, command?: string) => set((state) => ({
-          selectedFleets:
-            command == "all"
-              ? [...state.fleets]
-              : fleet
-              ? [...state.selectedFleets, fleet]
-              : [...state.selectedFleets],
-        }),
+    selectFleet: (fleet: IFleet | undefined, command?: string) => set((state) => { 
+        const flyt: any = {};
+        for (const [key, val] of Object.entries(fleet || {})) {
+          if (val.toNumber) { 
+            flyt[key] = val.toNumber(); 
+          } else {
+            flyt[key] = val;
+          }
+        }
+        return ({
+            selectedFleets:
+              command == "all"
+                ? [...state.fleets]
+                : fleet
+                ? [...state.selectedFleets, fleet]
+                : [...state.selectedFleets],
+          });
+        },
         false,
         "SelectFleet"
       ),
@@ -115,10 +125,10 @@ export const useFleetStore = create<FleetState>(devtools((set: SetType<FleetStat
             command == "all"
               ? []
               : fleet
-              ? state.selectedFleets.filter(
-                  (existFleet) => existFleet.name != fleet.name
-                )
-              : [],
+                ? state.selectedFleets.filter(
+                    (existFleet) => existFleet.name != fleet.name
+                  )
+                : [],
         }),
         false,
         "UnSelectFleet"
@@ -130,158 +140,28 @@ export const useFleetStore = create<FleetState>(devtools((set: SetType<FleetStat
 export const useResourceStore = create<ResourceState>(devtools((set: SetType<ResourceState>) => {
   return {
     resourcesData: {
-      ammo: {
-        imgSrc: ammoImg,
-        id: TOKENS.ammo,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        secondsNeedToMax: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
-      food: {
-        imgSrc: foodImg,
-        id: TOKENS.food,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        secondsNeedToMax: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
-      fuel: {
-        imgSrc: fuelImg,
-        id: TOKENS.fuel,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        secondsNeedToMax: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
-      tools: {
-        imgSrc: toolImg,
-        id: TOKENS.tools,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        secondsNeedToMax: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
+      ammo: FleetService.getDummyResource(TOKENS.ammo),
+      food: FleetService.getDummyResource(TOKENS.food),
+      fuel: FleetService.getDummyResource(TOKENS.fuel),
+      tools: FleetService.getDummyResource(TOKENS.tools)
     },
     atlasBalance: 0,
+    polisBalance: 0,
 
-    setResourcesData: (resourcesData: { [key: string]: IResourceData }) => set((state) => ({ resourcesData }), false, "setResourcesData"),
+    setResourcesData: (resourcesData: { [key: string]: IResourceData }) => set((state) => 
+      ({ resourcesData }), false, "setResourcesData"),
     setAtlasBalance: (balance: number) => set((state) => ({ atlasBalance: balance })),
-    reset: () => set((state) => ({resourcesData: {
-      ammo: {
-        imgSrc: ammoImg,
-        id: TOKENS.ammo,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        secondsNeedToMax: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
+    setPolisBalance: (balance: number) => set((state) => ({ polisBalance: balance })),
+    reset: () => set((state) => ({
+      resourcesData: {
+        ammo: FleetService.getDummyResource(TOKENS.ammo),
+        food: FleetService.getDummyResource(TOKENS.food),
+        fuel: FleetService.getDummyResource(TOKENS.fuel),
+        tools: FleetService.getDummyResource(TOKENS.tools)
       },
-      food: {
-        imgSrc: foodImg,
-        id: TOKENS.food,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        secondsNeedToMax: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
-      fuel: {
-        imgSrc: fuelImg,
-        id: TOKENS.fuel,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        secondsNeedToMax: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
-      tools: {
-        imgSrc: toolImg,
-        id: TOKENS.tools,
-        pct1Color: COLORS.THICK_GREY,
-        maxSeconds: 0,
-        maxUnits: 0,
-        unitsNeedToMax: 0,
-        burnRate: 0,
-        untisNeedToBuy: 0,
-        supply: 0,
-        secondsNeedToMax: 0,
-        secondsLeft: 0,
-        unitsLeft: 0,
-        isBlinking: false,
-        pct1: 0,
-        pct2: 0,
-        isLoading: false,
-      },
-    },
-    atlasBalance: 0}))
+      atlasBalance: 0,
+      polisBalance: 0
+    }))
   };
 }));
 
@@ -293,13 +173,22 @@ export const useAppStore = create<AppState>(devtools((set: SetType<AppState>) =>
     refreshing: false,
     signaturesToWait: [],
 
-    setErrorModal: (content: ErrorModalContent | undefined) => set((state) => ({ errorModalContent: content })),
-    setInfoModal: (content: InfoModalContent | undefined) => set((state) => ({ infoModalContent: content })),
+    setErrorModal: (content: ErrorModalContent | undefined) => set((state) => 
+      ({ errorModalContent: content })),
+    setInfoModal: (content: InfoModalContent | undefined) => set((state) => 
+      ({ infoModalContent: content })),
     startAppLoading: (info: AppLoader) => set((state) => ({ appLoading: { ... info} })),
-    stopAppLoading: () => set((state) => ({ appLoading: { loading: false, message: '', pct: 0 } })),
-    reset: () => set((state) => ({errorModalContent: undefined, infoModalContent: undefined, appLoading: {loading: false},})),
+    stopAppLoading: () => set((state) => 
+      ({ appLoading: { loading: false, message: '', pct: 0 } })),
+    reset: () => set((state) => 
+      ({
+        errorModalContent: undefined, 
+        infoModalContent: undefined, 
+        appLoading: {loading: false},})
+      ),
     setRefreshing: (isRefreshing: boolean) => set((state) => ({refreshing: isRefreshing})),
-    setSignaturesToWait: (signaturesToWait: WaitingSignature[]) => set((state) => ({signaturesToWait}))
+    setSignaturesToWait: (signaturesToWait: WaitingSignature[]) => set((state) => 
+      ({signaturesToWait}))
   };
 
 }));

@@ -20,9 +20,9 @@ import {
   WaitingSignature
 } from "../data/types";
 import { FleetService } from "../services/fleetService";
-import { MarketService } from "../services/marketService";
+// import { MarketService } from "../services/marketService";
 import { retryAsync, thousandsFormatter } from "../utils";
-import { AtlasIcon } from "./Atlas";
+import { AtlasIcon } from "./Icons";
 import { Button } from "./shared/Button";
 import { Modal } from "./shared/Modal";
 
@@ -80,6 +80,7 @@ export const TxModal: React.FC<Props> = ({
           CONN.getRecentBlockhash("finalized")
         ))!.blockhash;
 
+        /*
         let tipIxs = (await retryAsync(() =>
           MarketService.getTipsInstructions(
             publicKey,
@@ -87,8 +88,8 @@ export const TxModal: React.FC<Props> = ({
             calulateSubtotal() * tip
           )
         )) as TransactionInstruction[];
+        */
 
-        
         const instructions = [...buyInstructions ];
         
 
@@ -119,7 +120,7 @@ export const TxModal: React.FC<Props> = ({
           txs.push(new Transaction({
             feePayer: publicKey,
             recentBlockhash: latestBlockHash,
-          }).add(...tipIxs))
+          })) // .add(...tipIxs))
         }
 
         const signedTxs = await retryAsync(async () => {
@@ -149,7 +150,7 @@ export const TxModal: React.FC<Props> = ({
 
         const waitingSigntaures = signatures.map<WaitingSignature>(signature => ({hash: signature, status: 'processing'}));
         setSignaturesToWait(waitingSigntaures)
-        FleetService.checkSignatures(waitingSigntaures);
+        FleetService.checkSignatures(waitingSigntaures, publicKey);
 
         setInfoModal({
           modalType: InfoModalTypes.TX_LIST,
@@ -209,7 +210,7 @@ export const TxModal: React.FC<Props> = ({
                   <TD align="right">
                     <Cost>{thousandsFormatter(data.ammo.atlas, 4)}</Cost>{" "}
                     <AtlasIconWrapper>
-                      <AtlasIcon width={15} height={15} />
+                      <AtlasIcon width={15} height={15} className="" />
                     </AtlasIconWrapper>
                   </TD>
                 </tr>
@@ -234,7 +235,7 @@ export const TxModal: React.FC<Props> = ({
                   <TD align="right">
                     <Cost>{thousandsFormatter(data.food.atlas, 4)}</Cost>{" "}
                     <AtlasIconWrapper>
-                      <AtlasIcon width={15} height={15} />
+                      <AtlasIcon width={15} height={15} className="" />
                     </AtlasIconWrapper>
                   </TD>
                 </tr>
@@ -259,7 +260,7 @@ export const TxModal: React.FC<Props> = ({
                   <TD align="right">
                     <Cost>{thousandsFormatter(data.fuel.atlas, 4)}</Cost>{" "}
                     <AtlasIconWrapper>
-                      <AtlasIcon width={15} height={15} />
+                      <AtlasIcon width={15} height={15} className="" />
                     </AtlasIconWrapper>
                   </TD>
                 </tr>
@@ -284,7 +285,7 @@ export const TxModal: React.FC<Props> = ({
                   <TD align="right">
                     <Cost>{thousandsFormatter(data.tools.atlas, 4)}</Cost>{" "}
                     <AtlasIconWrapper>
-                      <AtlasIcon width={15} height={15} />
+                      <AtlasIcon width={15} height={15} className="" />
                     </AtlasIconWrapper>
                   </TD>
                 </tr>
@@ -300,7 +301,7 @@ export const TxModal: React.FC<Props> = ({
                 <TD align="right">
                   {thousandsFormatter(calulateSubtotal(), 4)}{" "}
                   <AtlasIconWrapper>
-                    <AtlasIcon width={15} height={15} />
+                    <AtlasIcon width={15} height={15} className="" />
                   </AtlasIconWrapper>
                 </TD>
                 <TD></TD>
@@ -327,7 +328,7 @@ export const TxModal: React.FC<Props> = ({
                 <TD align="right">
                   {thousandsFormatter(calulateSubtotal() * tip, 4)}{" "}
                   <AtlasIconWrapper>
-                    <AtlasIcon width={15} height={15} />
+                    <AtlasIcon width={15} height={15} className="" />
                   </AtlasIconWrapper>
                 </TD>
                 <TD></TD>
@@ -340,7 +341,7 @@ export const TxModal: React.FC<Props> = ({
                 <TD align="right">
                   {thousandsFormatter(calulateSubtotal() * (1 + tip), 4)}{" "}
                   <AtlasIconWrapper>
-                    <AtlasIcon width={15} height={15} />
+                    <AtlasIcon width={15} height={15} className="" />
                   </AtlasIconWrapper>
                 </TD>
                 <TD></TD>
@@ -503,7 +504,7 @@ const Tip = styled.div<{ selected: boolean }>`
   text-align: center;
   margin: 0 2px;
   background: ${(p) =>
-    p.selected ? PALLETE.FONT_COLOR_SIGN : PALLETE.CLUB_RED};
+    p.selected ? PALLETE.FONT_COLOR_SIGN : PALLETE.BASE_GREY};
   border-radius: 4px;
   color: ${PALLETE.FONT_COLOR};
   cursor: pointer;

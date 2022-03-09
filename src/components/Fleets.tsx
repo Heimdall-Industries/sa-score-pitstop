@@ -6,7 +6,6 @@ import { PALLETE } from "../constants";
 import { useAppStore, useFleetStore, useResourceStore } from "../data/store";
 import { IFleet } from "../data/types";
 import { FleetService } from "../services/fleetService";
-import { MarketService } from "../services/marketService";
 import { Fleet } from "./Fleet";
 import { Container } from "./shared/styled/Styled";
 
@@ -47,32 +46,20 @@ const Fleets = () => {
     <Wrapper>
       <Container>
         <FleetWrapper>
-          {appLoading.loading ? (
-            <></>
-          ) : (
-            <Header>
-              <Title>FLEETS</Title>
-              {/* <Filters>
-                {anySelected() ? (
-                  <AllFilter onClick={unselectAll}>UNSELECT ALL</AllFilter>
-                ) : (
-                  <AllFilter onClick={selectAll}>SELECT ALL</AllFilter>
-                )}
-              </Filters> */}
-              
-            </Header>
-          )}
           <div style={{width: '100%'}}>
             <FleetItems>
               {fleets.map((fleet, indx) => (
                 <Fleet
                   secondsLeft={FleetService.calculateFleetRemainingTime(fleet)}
                   image={fleet.image}
+                  resources={fleet.resources}
                   size={fleet.shipQuantityInEscrow.toNumber()}
                   name={fleet.name}
                   key={indx}
+                  shipMint={fleet.shipMint}
                   onSelectFleet={() => onSelectFleet(fleet)}
                   onUnSelectFleet={() => onUnSelectFleet(fleet)}
+                  unselectAll={unselectAll}
                   selected={
                     !!selectedFleets.find((sf) => sf.name == fleet.name)
                   }
@@ -103,52 +90,16 @@ const FleetWrapper = styled.div`
   padding: 32px 16px;
   color: ${PALLETE.FONT_COLOR};
   border-radius: 4px;
-  background-color: ${PALLETE.PRIMARY_BG_COLOR};
+  background-color: rgba(10, 10, 10, 0.6);
+  border: solid rgba(85, 230, 255, 0.2);
+  border-width: 1px 0 1px 0;
   min-height: 300px;
-  max-height: 900px;
   overflow-y: auto;
 `;
 
 const FleetItems = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
   width: 100%;
-
 `;
-
-const Filters = styled.div`
-  display: inline-flex;
-`;
-
-const AllFilter = styled.div`
-  border: 1px solid ${PALLETE.CLUB_RED};
-  color: ${PALLETE.CLUB_RED};
-  font-size: ${PALLETE.FONT_XM};
-  padding: 4px 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    color: ${PALLETE.CLUB_RED_HOVER};
-    border: 1px solid ${PALLETE.CLUB_RED_HOVER};
-  }
-`;
-
-const SelectedFilter = styled.div`
-  color: ${PALLETE.CLUB_RED};
-  font-size: ${PALLETE.FONT_XM};
-`;
-
-const Title = styled.h1`
-  display: inline-block;
-  margin-right: 20px;
-  margin-left: 8px;
-`;
-
-const Header = styled.div`
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-

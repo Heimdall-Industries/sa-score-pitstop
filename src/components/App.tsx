@@ -16,7 +16,6 @@ import { InfoModal } from "./InfoModal";
 import { Container } from "./shared/styled/Styled";
 import Spinner from "./Spinner";
 import { Starter } from "./Starter";
-import { ReactComponent as LoadingSpinner } from "../assets/images/spinner.svg";
 
 function App() {
   const { publicKey, connecting, disconnecting } = useWallet();
@@ -35,6 +34,7 @@ function App() {
     shallow
   );
   const setAtlasBalance = useResourceStore((state) => state.setAtlasBalance);
+  const setPolisBalance = useResourceStore((state) => state.setPolisBalance);
   const { appLoading, stopAppLoading, startAppLoading, resetApp } = useAppStore(
     (state) => ({
       appLoading: state.appLoading,
@@ -44,11 +44,6 @@ function App() {
     }),
     shallow
   );
-  const onRefresh = () => {
-    if (publicKey) {
-      FleetService.refresh(publicKey);
-    }
-  };
 
   React.useEffect(() => {
     if (publicKey) {
@@ -65,6 +60,7 @@ function App() {
             message: "Loading Fleets & Inventory Data",
           })
         )
+        FleetService.getNFTS()
         .then(() =>
           FleetService.getInventorySupplies(
             publicKey
@@ -87,6 +83,11 @@ function App() {
         .then(() =>
           MarketService.getBalanceAtlas(publicKey).then((balance) =>
             setAtlasBalance(balance)
+          )
+        )
+        .then(() =>
+          MarketService.getBalancePolis(publicKey).then((balance) =>
+            setPolisBalance(balance)
           )
         )
         .then(() =>
@@ -121,31 +122,7 @@ function App() {
         <></>
       ) : (
         <LoadingProvider>
-          <Header />
-          <Container>
-            <div
-              style={{
-                width: "100%",
-                justifyContent: "end",
-                display: "flex",
-                marginTop: 20,
-              }}
-            >
-              {publicKey ? (
-                <RefreshButton disabled={isRefreshing} onClick={onRefresh}>
-                  {isRefreshing ? (
-                    <>
-                      REFRESHING <LoadingSpinner style={{ marginLeft: 8 }} />
-                    </>
-                  ) : (
-                    "REFRESH"
-                  )}{" "}
-                </RefreshButton>
-              ) : (
-                <></>
-              )}
-            </div>
-          </Container>
+          <Header isRefreshing={isRefreshing} />
           <Content />
           <Fleet />
         </LoadingProvider>
@@ -159,20 +136,3 @@ function App() {
 
 export default App;
 
-const RefreshButton = styled.button`
-  border: 1px solid ${PALLETE.CLUB_RED};
-  color: ${PALLETE.CLUB_RED};
-  font-size: ${PALLETE.FONT_SM};
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 4px;
-  &:hover {
-    color: ${PALLETE.CLUB_RED_HOVER};
-    border: 1px solid ${PALLETE.CLUB_RED_HOVER};
-  }
-`;

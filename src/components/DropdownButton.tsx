@@ -83,7 +83,7 @@ const MainButton = styled(Button)`
   justify-content: space-between;
   width: 100%;
   &.unactive:active {
-    background-color: ${PALLETE.CLUB_RED};
+    background-color: ${PALLETE.BASE_GREY};
   }
 `;
 
@@ -92,7 +92,7 @@ const IconButton = styled(Button)`
   padding: 5px 16px;
   border-radius: 0 4px 4px 0;
   &.unactive:active {
-    background-color: ${PALLETE.CLUB_RED};
+    background-color: ${PALLETE.BASE_GREY};
   }
 `;
 
@@ -103,7 +103,7 @@ const ListWraper = styled.div`
   left: 0;
   right: 0;
   height: 139px;
-  background-color: ${PALLETE.CLUB_RED_DENSE};
+  background-color: ${PALLETE.BASE_GREY_DENSE};
   border-radius: 4px;
   display: flex;
   flex-direction: column;

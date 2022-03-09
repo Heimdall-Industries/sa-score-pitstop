@@ -64,8 +64,8 @@ export const ErrorModal = () => {
 
 const Wrapper = styled.div`
   padding: 20px 0;
-  border: 1px solid ${PALLETE.CLUB_RED};
-  background: ${PALLETE.CLUB_RED};
+  border: 1px solid ${PALLETE.BASE_GREY};
+  background: ${PALLETE.BASE_GREY};
   box-shadow: 0 0 2px 1px ${PALLETE.PRIMARY_BG_COLOR};
   border-radius: 4px;
   overflow-y: auto;
@@ -118,6 +118,6 @@ const Sperator = styled.div`
 const Link = styled.a`
   color: ${PALLETE.FONT_COLOR};
   &:hover {
-    color: ${PALLETE.CLUB_RED_HOVER};
+    color: ${PALLETE.BASE_GREY_HOVER};
   }
 `

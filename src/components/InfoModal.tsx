@@ -179,6 +179,6 @@ const Sperator = styled.div`
 const Link = styled.a`
   color: ${PALLETE.FONT_COLOR};
   &:hover {
-    color: ${PALLETE.CLUB_RED_HOVER};
+    color: ${PALLETE.BASE_GREY_HOVER};
   }
 `;

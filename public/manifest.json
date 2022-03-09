@@ -1,11 +1,11 @@
 {
-  "short_name": "Pitstop",
-  "name": "Create React App Sample",
+  "short_name": "Score Dashboard",
+  "name": "Star Atlas Score Dashboard",
   "icons": [
     {
-      "src": "club.svg",
+      "src": "favicon.png",
       "type": "image/png",
-      "sizes": "90x90 128x128 192x192"
+      "sizes": "32x32"
     }
   
   ],

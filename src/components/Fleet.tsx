@@ -1,8 +1,11 @@
 import * as React from "react";
+import { PublicKey } from "@solana/web3.js";
 import styled from "styled-components";
 import { COLORS, PALLETE } from "../constants";
 import { getHours } from "../utils";
 import { Clock } from "./Clock";
+import { Resources } from "./Resources";
+import { ResourceRemaining } from "../data/types";
 
 interface Props {
   name: string;
@@ -11,7 +14,10 @@ interface Props {
   size: number;
   onSelectFleet: () => void;
   onUnSelectFleet: () => void;
-  selected: boolean
+  resources: Record<string, ResourceRemaining>;
+  selected: boolean,
+  shipMint: PublicKey,
+  unselectAll: () => void;
 }
 
 export const Fleet: React.FC<Props> = ({
@@ -21,7 +27,10 @@ export const Fleet: React.FC<Props> = ({
   secondsLeft,
   onSelectFleet,
   onUnSelectFleet,
-  selected
+  resources,
+  selected,
+  shipMint,
+  unselectAll
 }) => {
   const fleetRef = React.useRef<HTMLDivElement>(null);
 
@@ -34,110 +43,75 @@ export const Fleet: React.FC<Props> = ({
   }
 
   const onClick = () => {
-    if (selected) {
-      onUnSelectFleet();
-    } else {
-      onSelectFleet();
-    }
+    // if (selected) {
+    //   onUnSelectFleet();
+    // } else {
+    //   onSelectFleet();
+    // }
   };
+
   return (
     <Wrapper onClick={onClick} ref={fleetRef}>
-      <ContentWrapper>
-        <Header imgUrl={image} />
-        <Body>
-          <Title>{name}</Title>
-          <Count>{size}</Count>
-          <RemainingTime>
-            <Clock seconds={secondsLeft} color={color} />
-          </RemainingTime>
-        </Body>
-        <Mask color={color} selected={selected} />
-      </ContentWrapper>
+      <Header imgUrl={image} />
+      <Body>
+        <Title>{name}</Title>
+        <Count>{size}</Count>
+        <RemainingTime>
+          <Clock seconds={secondsLeft} color={color} />
+        </RemainingTime>
+      </Body>
+      <ResourcesPanel>
+        <Resources currentShipMint={shipMint} />
+      </ResourcesPanel>
     </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  min-width: 350px;
+  width: 32%;
+  padding: 10px 10px 0 10px;
+  margin: 12px 8px 0 8px;
+  border-radius: 4px;
+  border: solid 1px rgba(200, 200, 200, 0.25);
+  box-shadow: inset;
+  position: relative;
+  background: rgb(0, 10, 20);
+  @media ${PALLETE.DEVICE.mobileL} {
+    width: 47%;
+  }
+`;
 
 interface HeaderProps {
   imgUrl: string;
 }
 
-const Wrapper = styled.div`
-  height: 200px;
-  /* min-width: 233px; */
-  width: 20%;
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: inset;
-  @media ${PALLETE.DEVICE.mobileL} {
-    width: 50%;
-    min-width: 0;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  transition: all 0.3s ease;
-  position: relative;
-  cursor: pointer;
-  /* box-shadow: 0 0 10px 10px black; */
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-const Blur = styled.div`
-  position: absolute;
-  border-radius: 8px;
-  box-shadow: 0 -20px 30px 19px #161616;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-`
-
-const Mask = styled.div<{ selected: boolean }>`
-  background: ${(p) => (p.selected ? "#ffffff5c" : "none")};
-  /* box-shadow: 0px 0px 7px 1px ${(p) => p.color} inset; */
-  position: absolute;
-  border-radius: 8px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none; /* to make clicks pass through */
-`;
-
 const Header = styled.div<HeaderProps>`
-  background-image: url(${(p) => p.imgUrl});
+  background-image: url(${(props) => props.imgUrl});
   background-size: cover;
   background-position: center;
-  height: 60%;
-  border-radius: 8px 8px 1px 1px;
+  z-index: 2;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  height: 34%;
+  border-radius: 2px;
+  position: absolute;
 `;
 
 const Body = styled.div`
   position: relative;
-  height: 40%;
-  padding: 8px 8px;
+  padding: 100px 8px 0px 8px;
+  margin: 40px 0 0 0;
+  z-index: 10;
   display: flex;
   flex-wrap: wrap;
-  /* border: 2px solid #252525; */
   border-top: 0;
-  border-radius: 0 0 8px 8px;
-  /* box-shadow: 0 -20px 30px 19px #161616; */
-  background: #161616;
-
-  ::before {
-    content: '';
-    height: 40px;
-    background: linear-gradient(to top,#161616,#00000005);
-    position: absolute;
-    top: -38px;
-    left: 0;
-    right: 0;
-  }
+  background: linear-gradient(0deg, 
+    rgb(0 10 20) 0%,
+    rgb(0 10 20) 30%,
+    rgba(0, 10, 20, 0) 100%
+  );
 `;
 
 const Count = styled.div`
@@ -147,19 +121,12 @@ const Count = styled.div`
   font-size: 12px;
   border: 1px solid #dbdbdb9b;
   position: absolute;
-  background: #080808c2;
-  border-radius: 15px;
-  top: -25.5%;
-  right: 5px;
-  height: 20px;
-  width: 40px;
-`;
-
-const IconWrapper = styled.svg`
-  width: 15px;
-  height: 15px;
-  margin-right: 4px;
-  fill: white;
+  background: #101010;
+  border-radius: 22px;
+  top: 62px;
+  right: 4px;
+  height: 32px;
+  width: 32px;
 `;
 
 const RemainingTime = styled.data`
@@ -175,3 +142,12 @@ const Title = styled.div`
   font-size: 14px;
   font-weight: bold;
 `;
+
+const ResourcesPanel = styled.div`
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  background: rgb(0 10 20);
+  padding: 4px 8px;
+  border-radius: 0 0 4px 4px;
+`

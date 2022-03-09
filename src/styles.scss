@@ -1,3 +1,5 @@
+@import './assets/styles/wallet-adapter.scss';
+
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @font-face {
   font-family: "nasalization";
@@ -6,7 +8,9 @@
 
 $secondary-bg-color: #252525;
 $font-color-sign: #4b4b4b;
-$primary-bg-color: #080808c2;
+$primary-bg-color: rgb(47, 46, 54);
+$primary-bg-color-fade: rgb(27, 26, 34);
+
 $primary-bg-color-hover: #3333337e;
 $font-color: #c5c3c3;
 $font-sm: 13.5px;
@@ -18,6 +22,7 @@ $club-red-hover: #d3768fd3;
 body,
 html {
   background: $primary-bg-color;
+  background: radial-gradient(circle, $primary-bg-color 0%, $primary-bg-color-fade 100%); 
   width: 100%;
   font-size: 14.5px;
 }
@@ -174,6 +179,10 @@ circle {
   fill: white;
 }
 
+.polis-bg {
+  fill: black;
+}
+
 .app-spinner {
   position: absolute;
   top: 0;
@@ -320,11 +329,611 @@ circle {
   }
 }
 
-.history {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  svg {
-    margin-right: 8px;
+
+/* --- TIPPY.JS ----------------- */
+
+.tippy-touch{
+  cursor:pointer!important
+}
+.tippy-notransition{
+  transition:none!important
+}
+.tippy-popper{
+  max-width:400px;
+  -webkit-perspective:800px;
+  perspective:800px;
+  z-index:9999;
+  outline:0;
+  transition-timing-function:cubic-bezier(.165,.84,.44,1);
+  pointer-events:none
+}
+.tippy-popper.html-template{
+  max-width:96%;
+  max-width:calc(100% - 20px)
+}
+.tippy-popper[x-placement^=top] [x-arrow]{
+  border-top:7px solid #234;
+  border-right:7px solid transparent;
+  border-left:7px solid transparent;
+  bottom:-7px;
+  margin:0 9px
+}
+.tippy-popper[x-placement^=top] [x-arrow].arrow-small{
+  border-top:5px solid #234;
+  border-right:5px solid transparent;
+  border-left:5px solid transparent;
+  bottom:-5px
+}
+.tippy-popper[x-placement^=top] [x-arrow].arrow-big{
+  border-top:10px solid #234;
+  border-right:10px solid transparent;
+  border-left:10px solid transparent;
+  bottom:-10px
+}
+.tippy-popper[x-placement^=top] [x-circle]{
+  -webkit-transform-origin:0 33%;
+  transform-origin:0 33%
+}
+.tippy-popper[x-placement^=top] [x-circle].enter{
+  -webkit-transform:scale(1) translate(-50%,-55%);
+  transform:scale(1) translate(-50%,-55%);
+  opacity:1
+}
+.tippy-popper[x-placement^=top] [x-circle].leave{
+  -webkit-transform:scale(.15) translate(-50%,-50%);
+  transform:scale(.15) translate(-50%,-50%);
+  opacity:0
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.light-theme [x-circle]{
+  background-color:#fff
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.light-theme [x-arrow]{
+  border-top:7px solid #fff;
+  border-right:7px solid transparent;
+  border-left:7px solid transparent
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.light-theme [x-arrow].arrow-small{
+  border-top:5px solid #fff;
+  border-right:5px solid transparent;
+  border-left:5px solid transparent
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.light-theme [x-arrow].arrow-big{
+  border-top:10px solid #fff;
+  border-right:10px solid transparent;
+  border-left:10px solid transparent
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.transparent-theme [x-circle]{
+  background-color:rgba(0,0,0,.7)
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.transparent-theme [x-arrow]{
+  border-top:7px solid rgba(0,0,0,.7);
+  border-right:7px solid transparent;
+  border-left:7px solid transparent
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.transparent-theme [x-arrow].arrow-small{
+  border-top:5px solid rgba(0,0,0,.7);
+  border-right:5px solid transparent;
+  border-left:5px solid transparent
+}
+.tippy-popper[x-placement^=top] .tippy-tooltip.transparent-theme [x-arrow].arrow-big{
+  border-top:10px solid rgba(0,0,0,.7);
+  border-right:10px solid transparent;
+  border-left:10px solid transparent
+}
+.tippy-popper[x-placement^=top] [data-animation=perspective]{
+  -webkit-transform-origin:bottom;
+  transform-origin:bottom
+}
+.tippy-popper[x-placement^=top] [data-animation=perspective].enter{
+  opacity:1;
+  -webkit-transform:translateY(-10px) rotateX(0);
+  transform:translateY(-10px) rotateX(0)
+}
+.tippy-popper[x-placement^=top] [data-animation=perspective].leave{
+  opacity:0;
+  -webkit-transform:translateY(0) rotateX(90deg);
+  transform:translateY(0) rotateX(90deg)
+}
+.tippy-popper[x-placement^=top] [data-animation=fade].enter{
+  opacity:1;
+  -webkit-transform:translateY(-10px);
+  transform:translateY(-10px)
+}
+.tippy-popper[x-placement^=top] [data-animation=fade].leave{
+  opacity:0;
+  -webkit-transform:translateY(-10px);
+  transform:translateY(-10px)
+}
+.tippy-popper[x-placement^=top] [data-animation=shift].enter{
+  opacity:1;
+  -webkit-transform:translateY(-10px);
+  transform:translateY(-10px)
+}
+.tippy-popper[x-placement^=top] [data-animation=shift].leave{
+  opacity:0;
+  -webkit-transform:translateY(0);
+  transform:translateY(0)
+}
+.tippy-popper[x-placement^=top] [data-animation=scale].enter{
+  opacity:1;
+  -webkit-transform:translateY(-10px) scale(1);
+  transform:translateY(-10px) scale(1)
+}
+.tippy-popper[x-placement^=top] [data-animation=scale].leave{
+  opacity:0;
+  -webkit-transform:translateY(0) scale(0);
+  transform:translateY(0) scale(0)
+}
+.tippy-popper[x-placement^=bottom] [x-arrow]{
+  border-bottom:7px solid #234;
+  border-right:7px solid transparent;
+  border-left:7px solid transparent;
+  top:-7px;
+  margin:0 9px
+}
+.tippy-popper[x-placement^=bottom] [x-arrow].arrow-small{
+  border-bottom:5px solid #234;
+  border-right:5px solid transparent;
+  border-left:5px solid transparent;
+  top:-5px
+}
+.tippy-popper[x-placement^=bottom] [x-arrow].arrow-big{
+  border-bottom:10px solid #234;
+  border-right:10px solid transparent;
+  border-left:10px solid transparent;
+  top:-10px
+}
+.tippy-popper[x-placement^=bottom] [x-circle]{
+  -webkit-transform-origin:0 -50%;
+  transform-origin:0 -50%
+}
+.tippy-popper[x-placement^=bottom] [x-circle].enter{
+  -webkit-transform:scale(1) translate(-50%,-45%);
+  transform:scale(1) translate(-50%,-45%);
+  opacity:1
+}
+.tippy-popper[x-placement^=bottom] [x-circle].leave{
+  -webkit-transform:scale(.15) translate(-50%,-5%);
+  transform:scale(.15) translate(-50%,-5%);
+  opacity:0
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.light-theme [x-circle]{
+  background-color:#fff
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.light-theme [x-arrow]{
+  border-bottom:7px solid #fff;
+  border-right:7px solid transparent;
+  border-left:7px solid transparent
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.light-theme [x-arrow].arrow-small{
+  border-bottom:5px solid #fff;
+  border-right:5px solid transparent;
+  border-left:5px solid transparent
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.light-theme [x-arrow].arrow-big{
+  border-bottom:10px solid #fff;
+  border-right:10px solid transparent;
+  border-left:10px solid transparent
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.transparent-theme [x-circle]{
+  background-color:rgba(0,0,0,.7)
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.transparent-theme [x-arrow]{
+  border-bottom:7px solid rgba(0,0,0,.7);
+  border-right:7px solid transparent;
+  border-left:7px solid transparent
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.transparent-theme [x-arrow].arrow-small{
+  border-bottom:5px solid rgba(0,0,0,.7);
+  border-right:5px solid transparent;
+  border-left:5px solid transparent
+}
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.transparent-theme [x-arrow].arrow-big{
+  border-bottom:10px solid rgba(0,0,0,.7);
+  border-right:10px solid transparent;
+  border-left:10px solid transparent
+}
+.tippy-popper[x-placement^=bottom] [data-animation=perspective]{
+  -webkit-transform-origin:top;
+  transform-origin:top
+}
+.tippy-popper[x-placement^=bottom] [data-animation=perspective].enter{
+  opacity:1;
+  -webkit-transform:translateY(10px) rotateX(0);
+  transform:translateY(10px) rotateX(0)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=perspective].leave{
+  opacity:0;
+  -webkit-transform:translateY(0) rotateX(-90deg);
+  transform:translateY(0) rotateX(-90deg)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=fade].enter{
+  opacity:1;
+  -webkit-transform:translateY(10px);
+  transform:translateY(10px)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=fade].leave{
+  opacity:0;
+  -webkit-transform:translateY(10px);
+  transform:translateY(10px)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=shift].enter{
+  opacity:1;
+  -webkit-transform:translateY(10px);
+  transform:translateY(10px)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=shift].leave{
+  opacity:0;
+  -webkit-transform:translateY(0);
+  transform:translateY(0)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=scale].enter{
+  opacity:1;
+  -webkit-transform:translateY(10px) scale(1);
+  transform:translateY(10px) scale(1)
+}
+.tippy-popper[x-placement^=bottom] [data-animation=scale].leave{
+  opacity:0;
+  -webkit-transform:translateY(0) scale(0);
+  transform:translateY(0) scale(0)
+}
+.tippy-popper[x-placement^=left] [x-arrow]{
+  border-left:7px solid #234;
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent;
+  right:-7px;
+  margin:6px 0
+}
+.tippy-popper[x-placement^=left] [x-arrow].arrow-small{
+  border-left:5px solid #234;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  right:-5px
+}
+.tippy-popper[x-placement^=left] [x-arrow].arrow-big{
+  border-left:10px solid #234;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+  right:-10px
+}
+.tippy-popper[x-placement^=left] [x-circle]{
+  -webkit-transform-origin:50% 0;
+  transform-origin:50% 0
+}
+.tippy-popper[x-placement^=left] [x-circle].enter{
+  -webkit-transform:scale(1) translate(-50%,-50%);
+  transform:scale(1) translate(-50%,-50%);
+  opacity:1
+}
+.tippy-popper[x-placement^=left] [x-circle].leave{
+  -webkit-transform:scale(.15) translate(-50%,-50%);
+  transform:scale(.15) translate(-50%,-50%);
+  opacity:0
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.light-theme [x-circle]{
+  background-color:#fff
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.light-theme [x-arrow]{
+  border-left:7px solid #fff;
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.light-theme [x-arrow].arrow-small{
+  border-left:5px solid #fff;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.light-theme [x-arrow].arrow-big{
+  border-left:10px solid #fff;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.transparent-theme [x-circle]{
+  background-color:rgba(0,0,0,.7)
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.transparent-theme [x-arrow]{
+  border-left:7px solid rgba(0,0,0,.7);
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.transparent-theme [x-arrow].arrow-small{
+  border-left:5px solid rgba(0,0,0,.7);
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent
+}
+.tippy-popper[x-placement^=left] .tippy-tooltip.transparent-theme [x-arrow].arrow-big{
+  border-left:10px solid rgba(0,0,0,.7);
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent
+}
+.tippy-popper[x-placement^=left] [data-animation=perspective]{
+  -webkit-transform-origin:right;
+  transform-origin:right
+}
+.tippy-popper[x-placement^=left] [data-animation=perspective].enter{
+  opacity:1;
+  -webkit-transform:translateX(-10px) rotateY(0);
+  transform:translateX(-10px) rotateY(0)
+}
+.tippy-popper[x-placement^=left] [data-animation=perspective].leave{
+  opacity:0;
+  -webkit-transform:translateX(0) rotateY(-90deg);
+  transform:translateX(0) rotateY(-90deg)
+}
+.tippy-popper[x-placement^=left] [data-animation=fade].enter{
+  opacity:1;
+  -webkit-transform:translateX(-10px);
+  transform:translateX(-10px)
+}
+.tippy-popper[x-placement^=left] [data-animation=fade].leave{
+  opacity:0;
+  -webkit-transform:translateX(-10px);
+  transform:translateX(-10px)
+}
+.tippy-popper[x-placement^=left] [data-animation=shift].enter{
+  opacity:1;
+  -webkit-transform:translateX(-10px);
+  transform:translateX(-10px)
+}
+.tippy-popper[x-placement^=left] [data-animation=shift].leave{
+  opacity:0;
+  -webkit-transform:translateX(0);
+  transform:translateX(0)
+}
+.tippy-popper[x-placement^=left] [data-animation=scale].enter{
+  opacity:1;
+  -webkit-transform:translateX(-10px) scale(1);
+  transform:translateX(-10px) scale(1)
+}
+.tippy-popper[x-placement^=left] [data-animation=scale].leave{
+  opacity:0;
+  -webkit-transform:translateX(0) scale(0);
+  transform:translateX(0) scale(0)
+}
+.tippy-popper[x-placement^=right] [x-arrow]{
+  border-right:7px solid #234;
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent;
+  left:-7px;
+  margin:6px 0
+}
+.tippy-popper[x-placement^=right] [x-arrow].arrow-small{
+  border-right:5px solid #234;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  left:-5px
+}
+.tippy-popper[x-placement^=right] [x-arrow].arrow-big{
+  border-right:10px solid #234;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+  left:-10px
+}
+.tippy-popper[x-placement^=right] [x-circle]{
+  -webkit-transform-origin:-50% 0;
+  transform-origin:-50% 0
+}
+.tippy-popper[x-placement^=right] [x-circle].enter{
+  -webkit-transform:scale(1) translate(-50%,-50%);
+  transform:scale(1) translate(-50%,-50%);
+  opacity:1
+}
+.tippy-popper[x-placement^=right] [x-circle].leave{
+  -webkit-transform:scale(.15) translate(-50%,-50%);
+  transform:scale(.15) translate(-50%,-50%);
+  opacity:0
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.light-theme [x-circle]{
+  background-color:#fff
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.light-theme [x-arrow]{
+  border-right:7px solid #fff;
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.light-theme [x-arrow].arrow-small{
+  border-right:5px solid #fff;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.light-theme [x-arrow].arrow-big{
+  border-right:10px solid #fff;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.transparent-theme [x-circle]{
+  background-color:rgba(0,0,0,.7)
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.transparent-theme [x-arrow]{
+  border-right:7px solid rgba(0,0,0,.7);
+  border-top:7px solid transparent;
+  border-bottom:7px solid transparent
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.transparent-theme [x-arrow].arrow-small{
+  border-right:5px solid rgba(0,0,0,.7);
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.transparent-theme [x-arrow].arrow-big{
+  border-right:10px solid rgba(0,0,0,.7);
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent
+}
+.tippy-popper[x-placement^=right] [data-animation=perspective]{
+  -webkit-transform-origin:left;
+  transform-origin:left
+}
+.tippy-popper[x-placement^=right] [data-animation=perspective].enter{
+  opacity:1;
+  -webkit-transform:translateX(10px) rotateY(0);
+  transform:translateX(10px) rotateY(0)
+}
+.tippy-popper[x-placement^=right] [data-animation=perspective].leave{
+  opacity:0;
+  -webkit-transform:translateX(0) rotateY(90deg);
+  transform:translateX(0) rotateY(90deg)
+}
+.tippy-popper[x-placement^=right] [data-animation=fade].enter{
+  opacity:1;
+  -webkit-transform:translateX(10px);
+  transform:translateX(10px)
+}
+.tippy-popper[x-placement^=right] [data-animation=fade].leave{
+  opacity:0;
+  -webkit-transform:translateX(10px);
+  transform:translateX(10px)
+}
+.tippy-popper[x-placement^=right] [data-animation=shift].enter{
+  opacity:1;
+  -webkit-transform:translateX(10px);
+  transform:translateX(10px)
+}
+.tippy-popper[x-placement^=right] [data-animation=shift].leave{
+  opacity:0;
+  -webkit-transform:translateX(0);
+  transform:translateX(0)
+}
+.tippy-popper[x-placement^=right] [data-animation=scale].enter{
+  opacity:1;
+  -webkit-transform:translateX(10px) scale(1);
+  transform:translateX(10px) scale(1)
+}
+.tippy-popper[x-placement^=right] [data-animation=scale].leave{
+  opacity:0;
+  -webkit-transform:translateX(0) scale(0);
+  transform:translateX(0) scale(0)
+}
+.tippy-popper .tippy-tooltip.transparent-theme{
+  background-color:rgba(0,0,0,.7)
+}
+.tippy-popper .tippy-tooltip.transparent-theme[data-animatefill]{
+  background-color:transparent
+}
+.tippy-popper .tippy-tooltip.light-theme{
+  color:#26323d;
+  box-shadow:0 4px 20px 4px rgba(0,20,60,.1),0 4px 80px -8px rgba(0,20,60,.2);
+  background-color:#fff
+}
+.tippy-popper .tippy-tooltip.light-theme[data-animatefill]{
+  background-color:transparent
+}
+.tippy-tooltip{
+  position:relative;
+  color:#fff;
+  border-radius:4px;
+  font-size:.95rem;
+  padding:.4rem .8rem;
+  text-align:center;
+  will-change:transform;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  background-color:#234
+}
+.tippy-tooltip--small{
+  padding:.25rem .5rem;
+  font-size:.8rem
+}
+.tippy-tooltip--big{
+  padding:.6rem 1.2rem;
+  font-size:1.2rem
+}
+.tippy-tooltip[data-animatefill]{
+  overflow:hidden;
+  background-color:transparent
+}
+.tippy-tooltip[data-interactive]{
+  pointer-events:auto
+}
+.tippy-tooltip[data-inertia]{
+  transition-timing-function:cubic-bezier(.53,2,.36,.85)
+}
+.tippy-tooltip [x-arrow]{
+  position:absolute;
+  width:0;
+  height:0
+}
+.tippy-tooltip [x-circle]{
+  position:absolute;
+  will-change:transform;
+  background-color:#234;
+  border-radius:50%;
+  width:130%;
+  width:calc(110% + 2rem);
+  left:50%;
+  top:50%;
+  z-index:-1;
+  overflow:hidden;
+  transition:all ease
+}
+.tippy-tooltip [x-circle]:before{
+  content:"";
+  padding-top:90%;
+  float:left
+}
+@media (max-width:450px){
+  .tippy-popper{
+    max-width:96%;
+    max-width:calc(100% - 20px)
   }
 }
+
+.tippy-popper .resource-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 4px 8px;
+}
+
+.tippy-popper .resource-name {
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  margin: 0 16px 0 0;
+}
+
+.tippy-popper .resource-percent {
+  
+}
+
+.tippy-popper .resource-units {
+  padding: 4px;
+  border-radius: 3px;
+  background-color: black;
+  width: 100%;
+  margin: 0 0 4px 0;
+}
+
+.tippy-popper .resource-units a {
+  color: rgb(180, 180, 180);
+  text-decoration: none;
+  display: flex;
+  justify-content: space-around;
+  border: solid rgb(90, 150, 160) 1px;
+  padding: 4px;
+  margin: -4px;
+  height: 32px;
+  align-items: center;
+  cursor: pointer;
+
+  > div {
+    padding: 0 8px;
+  }
+
+  svg {
+    color: rgb(60, 90, 100);
+    padding-right: 6px;
+    font-size: 18px;
+  }
+
+  &:hover {
+    color: rgb(230, 230, 230);
+
+    svg {
+      color: rgb(80, 210, 220);
+    }
+  }
+}
+
+
+
+/* --- END TIPPY.JS ------------- */

@@ -1,4 +1,10 @@
+import { format } from 'd3-format';
 import { USDC_DECIMAL } from "./constants";
+const formatSmall = format('.2s');
+const formatTiny = format('.1f');
+
+export const d3Format = (num: number) => Number(num) < 1 ? formatTiny(num) : formatSmall(num);
+
 
 export const getHours = (seconds: number) => seconds / 60 / 60;
 
@@ -13,16 +19,22 @@ export async function retryAsync<T>(
       return result;
     } catch (error) {
       console.log(error);
-
       _count -= 1;
       if (_count == 0) {
         throw error;
       } else {
+        await sleep(110);
         continue;
       }
     }
   }
 }
+
+export const sleep = async function (ms: number) {
+  return new Promise((resolve) =>setTimeout(resolve, ms));
+};
+
+
 
 function numberWithCommas(x: string) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

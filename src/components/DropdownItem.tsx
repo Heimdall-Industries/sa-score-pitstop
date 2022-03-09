@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import { BUY_SUPPLY_MODES, PALLETE } from "../constants";
 import { ReactComponent as InfoIcon } from "../assets/images/info.svg";
-import TooltipWrapper from "./shared/TooltipWrapper";
 import { MarketService } from "../services/marketService";
 
 interface Props {
@@ -15,9 +14,7 @@ export const DropdownItem: React.FC<Props> = ({ text, onClick, choosed }) => {
     <Wrapper onClick={() => onClick(text)}>
       <span style={{ display: "flex" }}>
         <span style={{ marginRight: 8, display: "flex" }}>
-        <TooltipWrapper text={MarketService.getDescriptionForMode(text)}>
           <InfoIcon width={15} />
-        </TooltipWrapper>
         </span>{" "}
         {text}
       </span>
@@ -43,6 +40,6 @@ const Wrapper = styled.div`
   align-items: center;
   cursor: pointer;
   &:hover {
-    background-color: ${PALLETE.CLUB_RED_HOVER};
+    background-color: ${PALLETE.BASE_GREY_HOVER};
   }
 `;

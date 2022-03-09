@@ -25,7 +25,7 @@ export interface IInventory {
 }
 
 export interface IResourceData {
-  imgSrc: string;
+  basic?: boolean;
   id: string;
   pct1Color: string;
   maxSeconds: number;
@@ -33,7 +33,7 @@ export interface IResourceData {
   unitsNeedToMax: number;
   secondsLeft: number;
   secondsNeedToMax: number;
-  untisNeedToBuy: number;
+  unitsNeedToBy: number;
   burnRate: number;
   unitsLeft: number;
   supply: number;
@@ -69,7 +69,7 @@ export type SetType<T extends object> = <
 ) => void;
 
 export const TOKENS = {
-  ammo: "AMMMO",
+  ammo: "AMMO",
   fuel: "FUEL",
   food: "FOOD",
   tools: "TOOLS",
@@ -218,3 +218,4 @@ export interface AppLoader {
   message?: string;
   pct?: number; 
 }
+
