@@ -3,7 +3,10 @@
 This is a fork of <a href="https://staratlas.club/">The Club</a>'s excellent dashboard for Star Atlas SCORE.  
 Original app: <a href="https://github.com/the-sa-club/sa-score-pitstop">`https://github.com/the-sa-club/sa-score-pitstop`</a>
 
-<a href="https://mattsahr.github.io/sa-score-pitstop">Demo</a>
+
+----------------
+
+<a href="https://mattsahr.github.io/sa-score-pitstop">Working Demo</a>
 
 ![App Screenshot](https://github.com/mattsahr/sa-score-pitstop/blob/main/src/assets/images/screencap-sa-score-pitstop-a.png?raw=true "App Screenshot")
 
