@@ -1,21 +1,10 @@
 # sa-score-pitstop
 
-This is a fork of <a href="https://staratlas.club/">The Club</a>'s excellent dashboard for Star Atlas SCORE.
+This is a fork of <a href="https://staratlas.club/">The Club</a>'s excellent dashboard for Star Atlas SCORE.  
+Original app: <a href="https://github.com/the-sa-club/sa-score-pitstop">`https://github.com/the-sa-club/sa-score-pitstop`</a>
 
 <a href="https://mattsahr.github.io/sa-score-pitstop">Demo</a>
 
-Original app: <a href="https://github.com/the-sa-club/sa-score-pitstop">`https://github.com/the-sa-club/sa-score-pitstop`</a>
-
-### Install
-
-Assuming you have `node` and `git` running on your machine:
-
-```
-git clone https://github.com/mattsahr/sa-score-pitstop
-cd sa-score-pitstop
-npm install
-npm run start
-```
 
 
 ### Main Differences
@@ -41,3 +30,15 @@ Hooking up buy buttons for ammo/fuel/food/tools is probably achievable.  But I c
 The original app uses an API enpoint for image that is hosted by **The Club**.  This version just adds small images for each ship.  In the event that we don't have a ship's image, the "official" image from the Star Atlas source is used.   The official images are big. 
 
 Hosting the images locally means that the app is dependent on a hand-curated list of ships and images, for providing small/fast images.  So whenever new ships get released, this app is immediately out of date.  That's bad.  But at least the app not leaning on outside API support.
+
+
+### Install
+
+Assuming you have `node` and `git` running on your machine:
+
+```
+git clone https://github.com/mattsahr/sa-score-pitstop
+cd sa-score-pitstop
+npm install
+npm run start
+```
