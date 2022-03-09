@@ -5,7 +5,7 @@ Original app: <a href="https://github.com/the-sa-club/sa-score-pitstop">`https:/
 
 <a href="https://mattsahr.github.io/sa-score-pitstop">Demo</a>
 
-
+![App Screenshot](https://github.com/mattsahr/sa-score-pitstop/blob/main/src/assets/images/screencap-sa-score-pitstop-a.png?raw=true "App Screenshot")
 
 ### Main Differences
 Besides visual design tweaks, this fork differs from the original in a few important ways.
@@ -14,6 +14,7 @@ Besides visual design tweaks, this fork differs from the original in a few impor
 
 Figment.io provides free API service for Solana ecosystem apps.  It's a generous free tier (10 requests per second, and 3 million requests per month)   The first time you run this app, it will tell you to go get an API key from Figment.io.  In the original version, a key for **The Club**'s endpoint is provided.
 
+![API Key](https://github.com/mattsahr/sa-score-pitstop/blob/main/src/assets/images/screencap-sa-score-pitstop-need-api-key.png?raw=true "API Key")
 #### 2 -- This fork does less.  
 
 The original app has functions for buying resources when you run out.  This version just links to the regular <a href="https://play.staratlas.com/market/">Star Atlas Marketplace</a> for purposes of buying more ammo/fuel/food/tools.  
