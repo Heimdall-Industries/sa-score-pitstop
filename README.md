@@ -15,18 +15,21 @@ Besides visual design tweaks, this fork differs from the original in a few impor
 
 #### 1 -- You need your own API key.  
 
-Figment.io provides free API service for Solana ecosystem apps.  It's a generous free tier (10 requests per second, and 3 million requests per month)   The first time you run this app, it will tell you to go get an API key from Figment.io.  In the original version, a key for **The Club**'s endpoint is provided.
+Figment.io provides free API service for Solana ecosystem apps.  It's a generous free tier (10 requests per second, and 3 million requests per month)   The first time you run this app, it will tell you to go get an API key from Figment.io.  
+
+In the original version, **The Club** provided an API endpoint.  This version assumes that you set up your own (free) endpoint.
 
 ![API Key](https://github.com/mattsahr/sa-score-pitstop/blob/main/src/assets/images/screencap-sa-score-pitstop-need-api-key.png?raw=true "API Key")
+
 #### 2 -- This fork does less.  
 
 The original app has functions for buying resources when you run out.  This version just links to the regular <a href="https://play.staratlas.com/market/">Star Atlas Marketplace</a> for purposes of buying more ammo/fuel/food/tools.  
 
-The reason for this is again related to the API endpoint.  The free tier of API access just doesn't cut it.  While 10 requests per second and 3 million requests per month is plenty generous, the limits get a bit taxed when you start, like, doing significant stuff.  It's easy to overlook just how **chatty** solana data and contracts are.  Getting the resource-buy functions to be reliable basically requires a higher tier (paid tier) of API access from Figment.io.
+The reason for this is again related to the API endpoint.  The free tier of API access just doesn't cut it.  While 10 requests per second and 3 million requests per month is plenty generous for a free tier, the limits get a bit taxed when you start, like, doing significant stuff.  It's easy to overlook just how **chatty** Solana data and contracts are.  Getting the resource-buy functions to be reliable basically requires a higher tier (paid tier) of API access from Figment.io.
 
 **PROBABLY POSSIBLE**
 
-Hooking up buy buttons for ammo/fuel/food/tools is probably achievable.  But I couldn't get it to work reliably.  And I think the limited scope (just resupply and claim Atlas buttons) is still worthwhile on its own. 
+Hooking up buy buttons for ammo/fuel/food/tools in a reliable way is probably achievable.  But I couldn't get it to work with any consistency.  And I think the limited scope provided here (just resupply and claim Atlas buttons) is still worthwhile on its own. 
 
 
 #### 3 -- This fork hosts images
