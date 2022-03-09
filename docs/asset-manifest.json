@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f3018a49.css",
+    "main.js": "/static/js/main.9d26d9e2.js",
+    "static/js/431.4187a0a5.chunk.js": "/static/js/431.4187a0a5.chunk.js",
+    "static/js/126.8dfe511b.chunk.js": "/static/js/126.8dfe511b.chunk.js",
+    "static/js/231.cf83e430.chunk.js": "/static/js/231.cf83e430.chunk.js",
+    "static/js/608.bd48ca4f.chunk.js": "/static/js/608.bd48ca4f.chunk.js",
+    "static/js/507.f0795f1e.chunk.js": "/static/js/507.f0795f1e.chunk.js",
+    "static/js/241.7ac686fb.chunk.js": "/static/js/241.7ac686fb.chunk.js",
+    "static/media/nasalization-rg.otf": "/static/media/nasalization-rg.4cbf2019f1f7337b2594.otf",
+    "static/media/food.png": "/static/media/food.ef9cfc4d024f26790236.png",
+    "static/media/tool.png": "/static/media/tool.48153070f7b2ce5b1622.png",
+    "static/media/fuel.png": "/static/media/fuel.0721e1d2bed7f5ba45b7.png",
+    "static/media/ammo.png": "/static/media/ammo.aa095590183fcbf806d0.png",
+    "static/media/spinner.svg": "/static/media/spinner.751e72c7a0dc359882c9b52eca96887b.svg",
+    "index.html": "/index.html",
+    "static/media/close-bold-svgrepo-com.svg": "/static/media/close-bold-svgrepo-com.bac11825e39c8f47c0e4ad7fe4db33bc.svg",
+    "main.f3018a49.css.map": "/static/css/main.f3018a49.css.map",
+    "main.9d26d9e2.js.map": "/static/js/main.9d26d9e2.js.map",
+    "431.4187a0a5.chunk.js.map": "/static/js/431.4187a0a5.chunk.js.map",
+    "126.8dfe511b.chunk.js.map": "/static/js/126.8dfe511b.chunk.js.map",
+    "231.cf83e430.chunk.js.map": "/static/js/231.cf83e430.chunk.js.map",
+    "608.bd48ca4f.chunk.js.map": "/static/js/608.bd48ca4f.chunk.js.map",
+    "241.7ac686fb.chunk.js.map": "/static/js/241.7ac686fb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f3018a49.css",
+    "static/js/main.9d26d9e2.js"
+  ]
+}

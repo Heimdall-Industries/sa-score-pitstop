@@ -27,9 +27,11 @@ Hooking up buy buttons for ammo/fuel/food/tools is probably achievable.  But I c
 
 #### 3 -- This fork hosts images
 
-The original app uses an API enpoint for image that is hosted by **The Club**.  This version just adds small images for each ship.  In the event that we don't have a ship's image, the "official" image from the Star Atlas source is used.   The official images are big. 
+The original app uses an API enpoint for small images that is hosted by **The Club**.  
 
-Hosting the images locally means that the app is dependent on a hand-curated list of ships and images, for providing small/fast images.  So whenever new ships get released, this app is immediately out of date.  That's bad.  But at least the app not leaning on outside API support.
+This version just includes small images for each ship in the app build.  In the event that we don't have a ship's image, the "official" image from the Star Atlas source is used.   The official images are big (sometims 5 MB!) 
+
+Hosting the images in-app means that the app is dependent on a hand-curated list of ships and images.  So whenever new ships get released, this app is immediately out of date, relying on the big/slow images for any new ships.  That's bad.  But at least the app not leaning on outside API support.
 
 
 ### Install

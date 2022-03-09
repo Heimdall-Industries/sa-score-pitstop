@@ -198,6 +198,7 @@ export const FIXED_FEE = 1
 export const ASSETS: any = {
   IMAGES: {
     'thumb-220': {
+      'ARC.jpg': true,
       'CALCH.jpg': true,
       'CALEV.jpg': true,
       'CALG.jpg': true,
@@ -209,6 +210,7 @@ export const ASSETS: any = {
       'FBLEGR.jpg': true,
       'FBLETR.jpg': true,
       'FBLEUN.jpg': true,
+      'FBLLOW.jpg': true,
       'OGKAJA.jpg': true,
       'OGKAMK.jpg': true,
       'OGKATP.jpg': true,
@@ -227,6 +229,7 @@ export const ASSETS: any = {
       'VZUSOP.jpg': true
     },
     'med-720': {
+      'ARC.jpg': true,
       'CALCH.jpg': true,
       'CALEV.jpg': true,
       'CALG.jpg': true,
@@ -238,6 +241,7 @@ export const ASSETS: any = {
       'FBLEGR.jpg': true,
       'FBLETR.jpg': true,
       'FBLEUN.jpg': true,
+      'FBLLOW.jpg': true,
       'OGKAJA.jpg': true,
       'OGKAMK.jpg': true,
       'OGKATP.jpg': true,
