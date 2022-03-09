@@ -36,3 +36,8 @@ The reason for this is again related to the API endpoint.  The free tier of API 
 Hooking up buy buttons for ammo/fuel/food/tools is probably achievable.  But I couldn't get it to work reliably.  And I think the limited scope (just resupply and claim Atlas buttons) is still worthwhile on its own. 
 
 
+#### 3 -- This fork hosts images
+
+The original app uses an API enpoint for image that is hosted by **The Club**.  This version just adds small images for each ship.  In the event that we don't have a ship's image, the "official" image from the Star Atlas source is used.   The official images are big. 
+
+Hosting the images locally means that the app is dependent on a hand-curated list of ships and images, for providing small/fast images.  So whenever new ships get released, this app is immediately out of date.  That's bad.  But at least the app not leaning on outside API support.
