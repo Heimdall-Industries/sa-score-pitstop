@@ -66,7 +66,6 @@ const Logo = styled.div`
   margin-bottom: 20px;
   b {
     font-size: 2rem;
-    font-family: "nasalization";
     color: ${PALLETE.FONT_COLOR};
   }
   svg {
