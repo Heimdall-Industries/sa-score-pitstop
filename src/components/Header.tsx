@@ -81,7 +81,7 @@ export const Header = (props: { isRefreshing: boolean }) => {
   const toolQty = inventory?.supplies.tools || 0;
 
   return (
-    <Wrapper>
+    <Wrapper className="header-wrapper">
       <Container>
         <Nav>
           <Menu className="header-bar">

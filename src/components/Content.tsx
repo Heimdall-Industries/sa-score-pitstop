@@ -26,10 +26,10 @@ const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 26px 0 14px 0;
-  border-radius: 4px 4px 0 0;
+  border-radius: 2px;
   margin: 16px 0 16px 0;
   background-color: rgba(10, 10, 10, 0.6);
-  border: solid rgba(85, 230, 255, 0.2);
+  border: solid rgba(85, 230, 255, 0.95);
   border-width: 1px 0 1px 0;
 
   @media ${PALLETE.DEVICE.mobileL} {  
