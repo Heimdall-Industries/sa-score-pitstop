@@ -94,21 +94,21 @@ export const Header = (props: { isRefreshing: boolean }) => {
               </Tooltip>
 
               <Tooltip trigger={'click'} arrow interactive
-                html={tooltipContents(foodQty, 'Food', fuelURL)}>
+                html={tooltipContents(foodQty, 'Food', foodURL)}>
                 <ResourceDisplay>
                   <ResourceIcon food />{thousandsFormatter(foodQty, RESOURCE_DECIMAL)}
                 </ResourceDisplay>
               </Tooltip>
 
               <Tooltip trigger={'click'} arrow interactive
-                html={tooltipContents(armsQty, 'Ammo', fuelURL)}>
+                html={tooltipContents(armsQty, 'Ammo', armsURL)}>
                 <ResourceDisplay>
                   <ResourceIcon arms />{thousandsFormatter(armsQty, RESOURCE_DECIMAL)}
                 </ResourceDisplay>
               </Tooltip>
 
               <Tooltip trigger={'click'} arrow interactive
-                html={tooltipContents(toolQty, 'Tools', fuelURL)}>
+                html={tooltipContents(toolQty, 'Tools', toolURL)}>
                 <ResourceDisplay>
                   <ResourceIcon tool />{thousandsFormatter(toolQty, RESOURCE_DECIMAL)}
                 </ResourceDisplay>
