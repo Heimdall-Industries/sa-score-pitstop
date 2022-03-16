@@ -9,7 +9,7 @@ export const Starter = () => {
 
   if (missingAPI) {
     return (
-      <Wrapper>
+      <Wrapper className="startup-modal">
         <Logo>
           <Title style={{width: '280px'}}>API KEY . . . ?</Title>
         </Logo>
@@ -34,7 +34,7 @@ export const Starter = () => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper className="startup-modal">
       <Logo>
         <Title>STAR ATLAS SCORE</Title>
       </Logo>

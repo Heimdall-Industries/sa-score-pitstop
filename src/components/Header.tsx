@@ -193,7 +193,7 @@ export const Header = (props: { isRefreshing: boolean }) => {
           <StatsMobile>
 
             <Tooltip arrow html={tokenContents(polisBalance, 'Polis')}>
-              <ResourceDisplay mobile>
+              <ResourceDisplay mobile style={{marginLeft: '16px'}}>
                 <AtlasIcon width={20} height={20} className="header-token-icon" />
                 <span>{thousandsFormatter(atlasBalance, ATLAS_DECIMAL)}</span>
               </ResourceDisplay>

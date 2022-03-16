@@ -8,7 +8,7 @@ export const Content = () => {
   return (
     <Wrapper>
       <Container>
-        <ContentWrapper>
+        <ContentWrapper className="overview-wrapper">
           <ResourcesSection>
             <Resources />
           </ResourcesSection>

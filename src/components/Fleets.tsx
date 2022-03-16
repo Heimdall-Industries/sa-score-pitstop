@@ -43,9 +43,9 @@ const Fleets = () => {
   const anySelected = () => selectedFleets.length > 0;
 
   return (
-    <Wrapper>
+    <Wrapper >
       <Container>
-        <FleetWrapper>
+        <FleetWrapper className="fleets-wrapper">
           <div style={{width: '100%'}}>
             <FleetItems>
               {fleets.map((fleet, indx) => (
