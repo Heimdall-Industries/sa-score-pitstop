@@ -25,5 +25,4 @@ export const LoadingProvider: React.FC = ({children}) => {
   );
 };
 
-
-export const useLoader = () => useContext(LoadingContext)
+export const useLoader = () => useContext(LoadingContext);

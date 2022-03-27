@@ -1,80 +1,79 @@
 import * as React from "react";
+import styled from "styled-components";
 import { useAppStore } from "../data/store";
 
 const AppSpinner = () => {
   const appLoading = useAppStore((state) => state.appLoading);
   return (
-    <div
-      className="app-spinner"
-      style={{
-        display: appLoading.loading ? "flex" : "none",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "fixed",
-        flexDirection: "column",
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 99999,
-      }}
-    >
-      <svg
-        className="loading-spinner"
-        style={{
-          display: "block",
-          shapeRendering: "auto",
-        }}
-        width="200"
-        height="200"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="xMidYMid"
-      >
-        <path
-          fill="none"
-          stroke="#b1b1b1"
-          strokeWidth="8"
-          strokeDasharray="205.271142578125 51.317785644531256"
-          d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z"
-          strokeLinecap="round"
-          style={{
-            transform: "scale(0.5)",
-            transformOrigin: "center",
-          }}
-        >
-          <animate
-            attributeName="stroke-dashoffset"
-            repeatCount="indefinite"
-            dur="3.125s"
-            keyTimes="0;1"
-            values="0;256.58892822265625"
-          ></animate>
-        </path>
-      </svg>
+    <SpinWrapper style={{ display: appLoading.loading ? "flex" : "none" }} >
 
-      <svg width="200px" height="20px" viewBox="0 0 200 20">
+      <Spinner>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45"/>
+        </svg>
+      </Spinner>
+
+      <svg width="200px" height="12px" viewBox="0 0 200 12">
         <defs>
           <clipPath id="ProgressBar-clipPath">
             <rect x="0" y="0" width="100%" height="100%" rx="4%"/>
           </clipPath>
         </defs>
         <rect x="0" y="0" width="100%" height="100%" fill="#b1b1b1" rx="4%" />
-        <rect x="0" y="0" width={`${appLoading.pct}%`} height="100%" fill="#d02452d3" clipPath="url(#ProgressBar-clipPath)" />
+        <rect x="0" y="0" width={`${appLoading.pct}%`} 
+          height="100%" fill="#10c0f0" 
+          clipPath="url(#ProgressBar-clipPath)" />
       </svg>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 10
-        }}
-      >
+      <SpinMessage>
         <b style={{ color: "white" }}>{appLoading.message}</b>
-        {/* <div className="dot-pulse"></div> */}
-      </div>
-    </div>
+      </SpinMessage>
+
+    </SpinWrapper>
   );
 };
 
 export default React.memo(AppSpinner);
+
+const SpinWrapper = styled.div`
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  flex-direction: column;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+`;
+
+const Spinner = styled.div`
+  height: 120px;
+  width: 120px;
+  margin: -60px 0 0 6px;
+
+  svg {
+    animation: 2s linear infinite svg-animation;
+    max-width: 100px;
+  }
+
+  circle {
+    animation: 1.4s ease-in-out infinite both circle-animation;
+    display: block;
+    fill: transparent;
+    stroke: rgb(130, 50, 160);
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 280;
+    stroke-width: 7px;
+    transform-origin: 50% 50%;
+  }  
+}
+`;
+
+const SpinMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+`;

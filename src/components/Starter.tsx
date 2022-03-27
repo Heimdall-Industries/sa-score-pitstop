@@ -1,6 +1,7 @@
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import styled from "styled-components";
 import { PALLETE, FIGMENT_KEY, NEED_API_KEY } from "../constants";
+import { Disclaimer } from './Disclaimer';
 
 let keyTest = FIGMENT_KEY; 
 let missingAPI = keyTest === NEED_API_KEY;
@@ -39,6 +40,7 @@ export const Starter = () => {
         <Title>STAR ATLAS SCORE</Title>
       </Logo>
       <WalletMultiButton />
+      <Disclaimer />
     </Wrapper>
   );
 };
@@ -56,6 +58,7 @@ const Wrapper = styled.div`
   background: rgba(0, 0, 0, 0.4);
   height: 100vh;
 `;
+
 
 const Title = styled.b``;
 
