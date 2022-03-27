@@ -95,6 +95,7 @@ const RefreshWrapper = styled.button`
   width: 84px;
   position: relative;
   letter-spacing: 0.07em;
+  margin: 0 4px 0 0;
   &:hover {
     color: ${lineBold};
     border: 1px solid ${lineBold};

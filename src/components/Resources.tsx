@@ -15,19 +15,21 @@ import {
 } from "../data/types";
 import { FleetService } from "../services/fleetService";
 import { MarketService } from "../services/marketService";
-import { retryAsync } from "../utils";
+import { d3Format, retryAsync } from "../utils";
 import { DropdownButton } from "./DropdownButton";
 import { DropdownItem } from "./DropdownItem";
+import { StatsPanel } from './StatsPanel';
 import Resource from "./Resource";
 import ClaimAtlas from "./ClaimAtlas";
 import { Button } from "./shared/Button";
 import { TxModal } from "./TxModal";
 
 interface Props {
-  currentShipMint?: PublicKey
+  currentShipMint?: PublicKey,
+  rewardsAtlasPerDay?: number
 }
 
-export const Resources: React.FC<Props> = ({currentShipMint}) => {
+export const Resources: React.FC<Props> = ({currentShipMint, rewardsAtlasPerDay}) => {
   const { selectedFleets, inventory, allFleets } = useFleetStore(
     (state) => ({
       selectedFleets: state.selectedFleets,
@@ -62,6 +64,7 @@ export const Resources: React.FC<Props> = ({currentShipMint}) => {
   });
 
   const [tooltipContent, setTooltipContent] = React.useState("")
+  const [tab, setTab] = React.useState('current');
 
   const [] = React.useState();
 
@@ -186,29 +189,50 @@ export const Resources: React.FC<Props> = ({currentShipMint}) => {
     }
   }, [selectedFleets, allFleets]);
 
-  const resorucesFleets = currentShipMint
+  const workingFleets = currentShipMint
     ? allFleets.filter((fleet: IFleet) => fleet.shipMint === currentShipMint)
     : selectedFleets.length > 0 ? selectedFleets : allFleets;
 
-  const minFleet = FleetService.findWhoDeplateFirst(resorucesFleets);
-  let resourcesSource = minFleet.stats!;
+  const minFleet = FleetService.findWhoDeplateFirst(workingFleets);
 
   if (!minFleet) {
     return <></>
   }
 
-  const workingData = currentShipMint 
-    ? FleetService.calculateResources(resorucesFleets, inventory)
-    : resourcesData;
+  const workingData = FleetService.calculateResources(workingFleets, inventory);
+
+  const toggleTab = () => {
+    if (tab === 'current') { setTab('stats'); } else { setTab('current'); }
+  }
+
+  const rewardsPerDay = rewardsAtlasPerDay || FleetService.calculateDailyRewards();
 
   const basic = Boolean(currentShipMint);
   return (
     <>
       {currentShipMint ? null : <Title align="center">ALL FLEETS</Title>}
-      <ResourceWrapper><Resource {...workingData.ammo} basic={basic} /></ResourceWrapper>
-      <ResourceWrapper><Resource {...workingData.tools} basic={basic} /></ResourceWrapper>
-      <ResourceWrapper><Resource {...workingData.fuel} basic={basic} /></ResourceWrapper>
-      <ResourceWrapper><Resource {...workingData.food} basic={basic} /></ResourceWrapper>
+
+      <Tabs>
+        <div className={'tab' + (tab === 'current' ? ' active' : '')} onClick={toggleTab}>
+          Current</div>
+        <div className={'tab' + (tab === 'stats' ? ' active' : '')}  onClick={toggleTab}>
+          Stats</div>
+      </Tabs>
+
+      <TabContent>
+
+        <div className={'resources-current' + (tab === 'current' ? ' active' : '')}>
+          <ResourceWrapper><Resource {...workingData.ammo} basic={basic} /></ResourceWrapper>
+          <ResourceWrapper><Resource {...workingData.tools} basic={basic} /></ResourceWrapper>
+          <ResourceWrapper><Resource {...workingData.fuel} basic={basic} /></ResourceWrapper>
+          <ResourceWrapper><Resource {...workingData.food} basic={basic} /></ResourceWrapper>
+        </div>
+
+        <div className={'resources-stats' + (tab === 'stats' ? ' active' : '')}>
+          <StatsPanel fleets={workingFleets} rewardsPerDay={rewardsPerDay} />
+        </div>
+
+      </TabContent>
 
       <Actions>
         <SupplyButtons>
@@ -244,6 +268,7 @@ const ResourcesWrapper = styled.div`
   @media ${PALLETE.DEVICE.mobileL} {
     justify-content: space-between;
   }
+
 `;
 
 const ResourceWrapper = styled.div``;
@@ -282,4 +307,73 @@ const Title = styled.h1<{ align?: string }>`
   line-height: 1;
   padding: 0 0 0.6em 0;
   text-align: ${(p) => p.align ?? "left"};
+`;
+
+
+interface TabProps {
+  current?: boolean;
+  stats?: boolean;
+}
+
+const TabContent = styled.div`
+  height: 148px;
+  position: relative;
+
+  .resources-current,
+  .resources-stats {
+    position: absolute;
+    width: 100%;
+    transition: opacity 400ms;
+    pointer-events: none;
+    opacity: 0;
+
+    &.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  .resources-stats {
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const Tabs = styled.div<TabProps>`
+  padding: 20px 0 0 28px;
+  border: solid ${PALLETE.DIVIDER_LINE};
+  border-width: 0 0 1px 0;
+  display: flex;
+  margin: 0 -14px 12px -12px;
+
+  .tab {
+    padding: 4px 12px 3px 18px;
+    opacity: 0.4;
+    border: solid ${PALLETE.DIVIDER_LINE};
+    border-width: 1px 1px 0 1px;
+    margin: 0 0 0 -4px;
+    cursor: pointer;
+    border-radius: 24px 5px 0 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: ${PALLETE.TAB_COLOR};
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+  .tab:first-of-type {
+  }
+  .tab.active {
+    opacity: 1;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.8);
+    cursor: default;
+
+    &:hover {
+      opacity: 1;
+    }
+
+  }
 `;

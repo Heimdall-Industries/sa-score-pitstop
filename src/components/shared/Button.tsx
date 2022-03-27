@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { PALLETE } from "../../constants";
 
 export const Button = styled.div`
-  padding: 8px 16px;
+  padding: 8px 8px;
   border-radius: 4px;
   height: 34px;
   background-color: rgba(0, 10, 20, 0.4);

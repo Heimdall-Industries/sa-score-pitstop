@@ -122,8 +122,8 @@ export const ClaimAtlas: React.FC<Props> = ({ currentShipMint }) => {
   const claim = currentShipMint ? singleClaim : totalClaim;
 
   return (
-    <Button onClick={onClaimClick}>
-      <span>CLAIM</span>
+    <Button style={{paddingRight: 0}} onClick={onClaimClick}>
+      <span style={{fontSize: '0.9em', marginLeft: '2px'}}>CLAIM</span>
       <span style={{fontWeight: 'bold', marginLeft: '10px'}}>
         {thousandsFormatter(claim, ATLAS_DECIMAL)}
       </span>

@@ -45,6 +45,8 @@ export const PALLETE = {
   BASE_GREY_DENSE: "rgba(30, 30, 30, 1)",
   BASE_GREY_HOVER: "rgba(0, 0, 0, 0.9)",
   BASE_GREY_BORDER: "rgba(150, 150, 150, 0.2)",
+  DIVIDER_LINE: "rgba(80, 180, 200, 0.5)",
+  TAB_COLOR: "rgb(50, 140, 160)",
 
   DEVICE : {
     mobileS: `(max-width: 320px)`,
@@ -224,8 +226,10 @@ export const ASSETS: any = {
       'PX4.jpg': true,
       'PX5.jpg': true,
       'PX6.jpg': true,
+      'THRILL.jpg': true,
       'TUFAFE.jpg': true,
       'VZUSAM.jpg': true,
+      'VSUSBA.jpg': true,
       'VZUSOP.jpg': true
     },
     'med-720': {
@@ -255,9 +259,18 @@ export const ASSETS: any = {
       'PX4.jpg': true,
       'PX5.jpg': true,
       'PX6.jpg': true,
+      'THRILL.jpg': true,
       'TUFAFE.jpg': true,
       'VZUSAM.jpg': true,
+      'VSUSBA.jpg': true,
       'VZUSOP.jpg': true
     }
   }
 };
+
+export const resourcePrices: any = {
+  'arms': 0.0021504,
+  'food': 0.0006144,
+  'fuel': 0.0014336,
+  'health': 0.0017408
+}

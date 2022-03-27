@@ -250,13 +250,6 @@ export class FleetService {
       rewardsAtlasPerDay: calcSecondsToDay(shipInfo.rewardRatePerSecond.toNumber()) * shipCount
     };
 
-    console.group('shipInfo');
-    console.log('shipInfo', shipInfo);
-    console.log('fleet', fleet);
-    console.log('AtlasPerDay',shipInfo.rewardRatePerSecond.toNumber(), '|', 
-      shipInfo.rewardRatePerSecond.toNumber() * 60 * 60 * 24 / 100000000);
-    console.groupEnd();
-
     return composedFleet;
   }
 
@@ -279,6 +272,8 @@ export class FleetService {
 
       if (fleetFullData) { 
         fleets.push(fleetFullData);
+      } else {
+        console.error('FLEET FULL DATA -- NOT FOUND');
       }
     }
 
@@ -354,13 +349,16 @@ export class FleetService {
       calcResource(fleet, 'food', resourcesData.food, inventory);
       calcResource(fleet, 'fuel', resourcesData.fuel, inventory);
       calcResource(fleet, 'tools', resourcesData.tools, inventory);
-
-      console.log('calculateResource FLEET', fleet);
-
     });
 
     return resourcesData;
 
+  }
+
+  public static calculateDailyRewards() {
+    return useFleetStore.getState().fleets.reduce((sum, fleet) => {
+      return sum + fleet.rewardsAtlasPerDay;
+    } ,0)
   }
 
   public static getPendingAtlas()  {

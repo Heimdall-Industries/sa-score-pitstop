@@ -56,12 +56,13 @@ const Fleets = () => {
                   size={fleet.shipQuantityInEscrow.toNumber()}
                   name={fleet.name}
                   key={indx}
+                  rewardsAtlasPerDay={fleet.rewardsAtlasPerDay}
                   shipMint={fleet.shipMint}
                   onSelectFleet={() => onSelectFleet(fleet)}
                   onUnSelectFleet={() => onUnSelectFleet(fleet)}
                   unselectAll={unselectAll}
                   selected={
-                    !!selectedFleets.find((sf) => sf.name == fleet.name)
+                    Boolean(selectedFleets.find((sf) => sf.name == fleet.name))
                   }
                 />
               ))}

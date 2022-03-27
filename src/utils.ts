@@ -1,9 +1,26 @@
 import { format } from 'd3-format';
 import { USDC_DECIMAL } from "./constants";
-const formatSmall = format('.2s');
-const formatTiny = format('.1f');
 
-export const d3Format = (num: number) => Number(num) < 1 ? formatTiny(num) : formatSmall(num);
+const formatSmall = format('.2s');
+const formatMed = format('.3s');
+const format1 = format('.1f');
+const format2 = format('.2f');
+const format3 = format('.3f');
+
+export const d3Format = (num: number, digits?: number) => 
+  Number(num) < 1 
+    ? digits 
+      ? digits > 2 
+        ? format3(num)
+        : digits > 1
+          ? format2(num)
+          : format1(num)
+      : format1(num)
+    : digits
+      ? digits > 1
+        ? formatMed(num)
+        : formatSmall(num)
+      : formatSmall(num);
 
 
 export const getHours = (seconds: number) => seconds / 60 / 60;

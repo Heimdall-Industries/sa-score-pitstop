@@ -6,6 +6,7 @@ export interface IFleet extends ShipStakingInfo {
   image: string;
   resources: { [key: string]: ResourceRemaining };
   pendingRewardsV2: number,
+  rewardsAtlasPerDay: number,
   stats?: {[key: string]: IResourceData}
 }
 

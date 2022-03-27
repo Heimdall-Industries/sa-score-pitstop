@@ -15,6 +15,7 @@ interface Props {
   onSelectFleet: () => void;
   onUnSelectFleet: () => void;
   resources: Record<string, ResourceRemaining>;
+  rewardsAtlasPerDay: number;
   selected: boolean,
   shipMint: PublicKey,
   unselectAll: () => void;
@@ -28,6 +29,7 @@ export const Fleet: React.FC<Props> = ({
   onSelectFleet,
   onUnSelectFleet,
   resources,
+  rewardsAtlasPerDay,
   selected,
   shipMint,
   unselectAll
@@ -61,7 +63,7 @@ export const Fleet: React.FC<Props> = ({
         </RemainingTime>
       </Body>
       <ResourcesPanel>
-        <Resources currentShipMint={shipMint} />
+        <Resources currentShipMint={shipMint} rewardsAtlasPerDay={rewardsAtlasPerDay} />
       </ResourcesPanel>
     </Wrapper>
   );
@@ -69,7 +71,8 @@ export const Fleet: React.FC<Props> = ({
 
 const Wrapper = styled.div`
   min-width: 350px;
-  width: 32%;
+  width: 100%;
+  max-width: 390px;
   padding: 10px 10px 0 10px;
   margin: 12px 8px 0 8px;
   border-radius: 4px;

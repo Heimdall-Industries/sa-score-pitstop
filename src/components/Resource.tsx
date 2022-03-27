@@ -134,7 +134,7 @@ interface IconProps {
 const ResourceWrap = styled.div`
   display: flex; 
   width: 100%;
-  height: 30px;
+  height: 38px;
   padding: 6px 0 0 6px;
 `;
 
@@ -142,14 +142,14 @@ const PercentStripe = styled.div`
   position: relative;
   width: calc(100% - 130px);
   height: 20px;
-  margin: 0px 0 4px 0;
+  margin: 0 0 8px 0;
 `;
 
 const ClockWrap = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 108px;
-  padding: 4px 6px 0 0;
+  padding: 1px 6px 0 0;
 `;
 
 const Kontent = styled.div`
