@@ -1,7 +1,7 @@
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import styled from "styled-components";
 import { PALLETE, FIGMENT_KEY, NEED_API_KEY } from "../constants";
-import { Disclaimer } from './Disclaimer';
+import { Disclaimer, Attribution } from './Disclaimer';
 
 let keyTest = FIGMENT_KEY; 
 let missingAPI = keyTest === NEED_API_KEY;
@@ -41,6 +41,7 @@ export const Starter = () => {
       </Logo>
       <WalletMultiButton />
       <Disclaimer />
+      <Attribution />
     </Wrapper>
   );
 };
